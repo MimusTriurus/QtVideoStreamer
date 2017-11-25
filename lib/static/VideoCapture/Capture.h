@@ -5,9 +5,10 @@
 #include <QObject>
 #include <QDebug>
 
+#include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgproc.hpp>
 
 #define DEFAULT_CAMERA_ID 0
 
@@ -42,11 +43,11 @@ signals:
     /**
      * @brief новый кадр получен из источника
      */
-    void newFrame( const QImage & );
+    void newQFrame( const QImage & );
     /**
      * @brief новый кадр получен из источника
      */
-    void newFrame( cv::Mat & );
+    void newCvFrame( cv::Mat );
 private:
     cv::VideoCapture _cap;
 };

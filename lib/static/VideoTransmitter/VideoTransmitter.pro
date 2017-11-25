@@ -21,8 +21,16 @@ unix {
     INSTALLS += target
 }
 
-CONFIG += link_pkgconfig
-PKGCONFIG += opencv
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv
+}
+
+win32 {
+    LIBS += -LC:/opencv2/opencv/build/x64/vc14/lib/*
+    INCLUDEPATH += C:/opencv2/opencv/build/include
+    DEPENDPATH += C:/opencv2/opencv/build/include
+}
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Converter/release/ -lConverter
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Converter/debug/ -lConverter

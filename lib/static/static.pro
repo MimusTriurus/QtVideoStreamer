@@ -1,7 +1,12 @@
 TEMPLATE = subdirs
 
-SUBDIRS += \
-    VideoCapture \
-    VideoTransmitter \
-    VideoReciever \
-    Converter
+CONFIG += ordered
+
+SUBDIRS +=              \
+    Converter               \
+    ImageSerialization  \
+    VideoCapture         \
+    VideoTransmitter     \
+    VideoReciever        \
+
+

@@ -21,5 +21,15 @@ unix {
     INSTALLS += target
 }
 
-CONFIG += link_pkgconfig
-PKGCONFIG += opencv
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv
+}
+
+win32 { LIBS += -L$$PWD/../../dependencies/lib/ -lopencv_core2413 \
+    -lopencv_highgui2413 \
+    -lopencv_imgproc2413
+
+    INCLUDEPATH += $$PWD/../../../dependencies/include
+    DEPENDPATH += $$PWD/../../../dependencies/include
+}

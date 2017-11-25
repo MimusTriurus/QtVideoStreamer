@@ -3,6 +3,8 @@
 
 #include <QDebug>
 #include <QTimer>
+#include <QImageWriter>
+#include <ImageSerialization.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,25 +14,29 @@ MainWindow::MainWindow(QWidget *parent) :
 
     capture = new Capture( this );
 
-    capture->open( );
+    capture->open( 1 );
 
     connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), capture, SLOT( read( ) ) );
-    connect( capture, SIGNAL( newFrame( QImage ) ),
+
+    connect( capture, SIGNAL( newQFrame( QImage ) ),
              this, SLOT( updateOriginalFrame( QImage ) ) );
+
     _tmrFrameUpdate.start( 5 );
-
-    connect( capture, SIGNAL( newFrame( cv::Mat& ) ),
-             &_frameTransmitter, SLOT( sendNewFrame( cv::Mat& ) ) );
-
-    _frameTransmitter.connectToHost( );
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow( ) {
     delete ui;
 }
 
-void MainWindow::updateOriginalFrame( const QImage &qOriginalFrame )
-{
-    ui->label->setPixmap( QPixmap::fromImage( qOriginalFrame ) );
+void MainWindow::updateOriginalFrame( const QImage &qOriginalFrame ) {
+    _frameTransmitter.sendNewFrame( ImageSerialization::serialize( qOriginalFrame ) );
+    _background = qOriginalFrame;
+    this->repaint( );
+}
+
+void MainWindow::paintEvent( QPaintEvent *event ) {
+    Q_UNUSED( event )
+    if ( _background.isNull( ) ) return;
+    QPainter painter( this );
+    painter.drawImage( 0, 0, _background.scaled( this->size( ) ) );
 }

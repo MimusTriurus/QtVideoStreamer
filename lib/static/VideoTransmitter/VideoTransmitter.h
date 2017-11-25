@@ -9,20 +9,23 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+/**
+ * @brief Передатчик видео стрима
+ */
 class VideoTransmitter : public QObject
 {
     Q_OBJECT
 public:
-    VideoTransmitter( QObject *parent = nullptr );
+    VideoTransmitter( QString host = "localhost", quint16 port = 10000, QObject *parent = nullptr );
 public slots:
-    void sendNewFrame( cv::Mat &frame );
-    void connectToHost( QString host = "localhost", int port = 8080 );
+    void sendNewFrame( QByteArray imgData );
 private:
     QUdpSocket _socket;
-    std::vector < uchar > _encoded;
+    void sendPacketsCount( int count );
+    const int PACKET_SIZE;
+    const QHostAddress HOST;
+    const quint16 PORT;
 private slots:
-    void onConnected( );
-    void onDisconnected( );
     void onError( QAbstractSocket::SocketError errorMessage );
 };
 

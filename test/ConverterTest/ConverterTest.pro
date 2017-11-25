@@ -7,6 +7,12 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
+DESTDIR = ../../bin
+
+MOC_DIR = moc
+
+OBJECTS_DIR = obj
+
 SOURCES += main.cpp
 
 

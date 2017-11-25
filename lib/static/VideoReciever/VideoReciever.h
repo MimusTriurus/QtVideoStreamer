@@ -3,21 +3,23 @@
 
 #include <QtCore>
 #include <QUdpSocket>
+#include <QImage>
 
-#include <Converter.h>
-
-#define BUF_LEN 65540
-
+/**
+ * @brief Приемник видеопотока
+ */
 class VideoReciever : public QObject
 {
     Q_OBJECT
 public:
-    VideoReciever( QObject *parent = nullptr );
+    explicit VideoReciever( quint16 port = 10000, QObject *parent = nullptr );
+signals:
+    void imageReceived( QImage img );
 private:
     QUdpSocket _server;
-    QByteArray _frameBuffer;
-    int _packetCount{ 0 };
-    int _currentPacket{ 0 };
+    int _packetCount;
+    QByteArray _imgBytes;
+    QBuffer _buffer;
 private slots:
     void onRecieveData( );
 };

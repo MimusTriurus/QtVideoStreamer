@@ -11,6 +11,13 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = VideoCaptureTest
 TEMPLATE = app
 
+CONFIG += c++11
+
+DESTDIR = ../../bin
+
+MOC_DIR = moc
+
+OBJECTS_DIR = obj
 
 SOURCES += main.cpp\
         mainwindow.cpp
@@ -19,10 +26,21 @@ HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
-CONFIG += c++11
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv
+}
 
-CONFIG += link_pkgconfig
-PKGCONFIG += opencv
+win32 { LIBS += -L$$PWD/../../dependencies/lib/ -lopencv_core2413 \
+    -lopencv_imgproc2413 \
+    -lopencv_highgui2413
+
+    INCLUDEPATH += $$PWD/../../dependencies/include
+    DEPENDPATH += $$PWD/../../dependencies/include
+}
+
+INCLUDEPATH += $$PWD/../../lib/static/VideoCapture/include
+DEPENDPATH += $$PWD/../../lib/static/VideoCapture/include
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/VideoCapture/release/ -lVideoCapture
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/VideoCapture/debug/ -lVideoCapture

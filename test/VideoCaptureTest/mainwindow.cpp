@@ -10,22 +10,35 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    capture = new Capture( this );
+    _capture.open( CAMERA_ID );
 
-    capture->open( );
+    connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), &_capture, SLOT( read( ) ) );
+    connect( &_capture, SIGNAL( newQFrame( QImage ) ),
+             this, SLOT( onNewQFrame( QImage ) ) );
 
-    connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), capture, SLOT( read( ) ) );
-    connect( capture, SIGNAL( newFrame( QImage ) ),
-             this, SLOT( updateOriginalFrame( QImage ) ) );
-    _tmrFrameUpdate.start( 5 );
+    connect( &_capture, SIGNAL( newCvFrame( cv::Mat ) ),
+             this, SLOT( onNewCvFrame( cv::Mat ) ) );
+
+    _tmrFrameUpdate.setInterval( UPDATE_FRAME_INTERVAL );
+    _tmrFrameUpdate.start( );
+
+    cv::namedWindow( CV_WIN_NAME, 1 );
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow( ) {
     delete ui;
 }
 
-void MainWindow::updateOriginalFrame( const QImage &qOriginalFrame )
-{
-    ui->label->setPixmap( QPixmap::fromImage( qOriginalFrame ) );
+void MainWindow::onNewQFrame( QImage frame ) {
+    _background = frame;
+    this->repaint( );
+}
+
+void MainWindow::onNewCvFrame( cv::Mat frame ) {
+    imshow( CV_WIN_NAME, frame );
+}
+
+void MainWindow::paintEvent( QPaintEvent *event ) {
+    QPainter painter( this );
+    painter.drawImage(0, 0, _background.scaled( this->size( ) ) );
 }

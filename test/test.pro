@@ -3,4 +3,6 @@ TEMPLATE = subdirs
 SUBDIRS += \
     VideoCaptureTest \
     TransmitterTest \
-    ConverterTest
+    ConverterTest \
+    OpenCvTest \
+    ReceiverTest

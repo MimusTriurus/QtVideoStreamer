@@ -3,12 +3,13 @@
 # Project created by QtCreator 2017-11-25T20:30:06
 #
 #-------------------------------------------------
-
+QT       += widgets
 QT       -= gui
 
 TARGET = ImageSerialization
 TEMPLATE = lib
 CONFIG += staticlib
+CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
