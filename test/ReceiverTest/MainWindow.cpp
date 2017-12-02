@@ -6,7 +6,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect( &_frameReciever, &VideoReciever::imageReceived, this, &MainWindow::onReceiveImg );
+    //connect( &_frameReciever, &VideoReciever::imageReceived, this, &MainWindow::onReceiveImg );
+    connect( &_frameReceiver, SIGNAL( matReceived( cv::Mat ) ), this, SLOT( onReceiveImg( cv::Mat ) ) );
 }
 
 MainWindow::~MainWindow( ) {
@@ -23,4 +24,13 @@ void MainWindow::paintEvent( QPaintEvent *event ) {
 void MainWindow::onReceiveImg( QImage frame ) {
     _background = frame;
     this->repaint( );
+}
+
+void MainWindow::onReceiveImg( cv::Mat img ) {
+    //qDebug( ) << "receive img";
+    if ( img.data ) {
+        qDebug( ) << img.rows << img.cols;
+        //cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );
+        //cv::imshow( "Display window", img );
+    }
 }

@@ -21,6 +21,19 @@ unix {
     INSTALLS += target
 }
 
+unix {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += opencv
+}
+
+win32 { LIBS += -L$$PWD/../../dependencies/lib/ -lopencv_core2413 \
+    -lopencv_highgui2413 \
+    -lopencv_imgproc2413
+
+    INCLUDEPATH += $$PWD/../../../dependencies/include
+    DEPENDPATH += $$PWD/../../../dependencies/include
+}
+
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Converter/release/ -lConverter
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Converter/debug/ -lConverter
 else:unix: LIBS += -L$$OUT_PWD/../Converter/ -lConverter

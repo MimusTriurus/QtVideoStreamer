@@ -5,6 +5,7 @@
 #include <QImage>
 #include <QPainter>
 #include <VideoReciever.h>
+#include "opencv2/opencv.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -22,9 +23,10 @@ protected:
 private:
     QImage _background;
     Ui::MainWindow *ui;
-    VideoReciever _frameReciever;
+    VideoReciever _frameReceiver;
 private slots:
     void onReceiveImg( QImage img );
+    void onReceiveImg( cv::Mat img );
 };
 
 #endif // MAINWINDOW_H

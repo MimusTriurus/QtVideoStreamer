@@ -7,6 +7,8 @@
 #include <QUdpSocket>
 #include <QPainter>
 
+#include "opencv2/opencv.hpp"
+
 namespace Ui {
 class MainWindow;
 }
@@ -27,7 +29,7 @@ private:
     VideoTransmitter _frameTransmitter{ "127.0.0.1", 10000 };
 private slots:
     void updateOriginalFrame( const QImage &qOriginalFrame );
-
+    void updateOriginalFrame( cv::Mat mat );
     // QWidget interface
 protected:
     void paintEvent( QPaintEvent *event );

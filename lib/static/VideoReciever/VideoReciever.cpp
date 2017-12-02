@@ -5,11 +5,21 @@
 
 VideoReciever::VideoReciever(quint16 port, QObject *parent ) : QObject( parent ) {
     _server.bind( QHostAddress::Any, port );
-    connect( &_server, &QUdpSocket::readyRead, this, &VideoReciever::onRecieveData );
+//    connect( &_server, &QUdpSocket::readyRead, this, &VideoReciever::onReceiveData );
+    connect( &_server, &QUdpSocket::readyRead, this, &VideoReciever::onReceiveMatData );
 }
 
-void VideoReciever::onRecieveData( ) {
-    while (_server.hasPendingDatagrams( ) ) {
+void VideoReciever::onReceiveMatData( ) {
+    /*
+    while ( _server.hasPendingDatagrams( ) ) {
+        QByteArray datagram;
+        datagram.resize( _server.pendingDatagramSize( ) );
+        QHostAddress *address = new QHostAddress( );
+        _server.readDatagram( datagram.data( ), datagram.size( ), address );
+        emit matReceived( ImageSerialization::deserializeMat( datagram ) );
+    }
+    */
+    while ( _server.hasPendingDatagrams( ) ) {
         QByteArray datagram;
         datagram.resize( _server.pendingDatagramSize( ) );
         QHostAddress *address = new QHostAddress( );
@@ -18,8 +28,39 @@ void VideoReciever::onRecieveData( ) {
         if ( msgSize == sizeof( int ) ) {
             QDataStream stream( datagram );
             stream >> _packetCount;
+            //qDebug( ) << "count:" << _packetCount;
             if ( _imgBytes.count( ) != 0 ) {
-                emit imageReceived( ImageSerialization::deserialize( _imgBytes ) );
+                emit matReceived( ImageSerialization::deserializeMat( _imgBytes ) );
+            }
+            _imgBytes.clear( );
+            return;
+        }
+        _imgBytes.append( datagram );
+    }
+}
+
+void VideoReciever::onReceiveData( ) {
+    /*
+    while ( _server.hasPendingDatagrams( ) ) {
+        QByteArray datagram;
+        datagram.resize( _server.pendingDatagramSize( ) );
+        QHostAddress *address = new QHostAddress( );
+        _server.readDatagram( datagram.data( ), datagram.size( ), address );
+        emit imageReceived( ImageSerialization::deserializeImg( datagram ) );
+    }
+    */
+    while ( _server.hasPendingDatagrams( ) ) {
+        QByteArray datagram;
+        datagram.resize( _server.pendingDatagramSize( ) );
+        QHostAddress *address = new QHostAddress( );
+        _server.readDatagram( datagram.data( ), datagram.size( ), address );
+        int msgSize{ datagram.size( ) };
+        if ( msgSize == sizeof( int ) ) {
+            QDataStream stream( datagram );
+            stream >> _packetCount;
+            qDebug( ) << "count:" << _packetCount;
+            if ( _imgBytes.count( ) != 0 ) {
+                emit matReceived( ImageSerialization::deserializeMat( _imgBytes ) );
             }
             _imgBytes.clear( );
             return;

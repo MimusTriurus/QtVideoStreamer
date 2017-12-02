@@ -18,8 +18,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), capture, SLOT( read( ) ) );
 
-    connect( capture, SIGNAL( newQFrame( QImage ) ),
-             this, SLOT( updateOriginalFrame( QImage ) ) );
+    //connect( capture, SIGNAL( newQFrame( QImage ) ),
+             //this, SLOT( updateOriginalFrame( QImage ) ) );
+    connect( capture, SIGNAL( newCvFrame( cv::Mat ) ),
+             this, SLOT( updateOriginalFrame( cv::Mat ) ) );
 
     _tmrFrameUpdate.start( 5 );
 }
@@ -29,9 +31,14 @@ MainWindow::~MainWindow( ) {
 }
 
 void MainWindow::updateOriginalFrame( const QImage &qOriginalFrame ) {
-    _frameTransmitter.sendNewFrame( ImageSerialization::serialize( qOriginalFrame ) );
+    _frameTransmitter.sendNewFrame( ImageSerialization::serializeImg( qOriginalFrame ) );
     _background = qOriginalFrame;
     this->repaint( );
+}
+
+void MainWindow::updateOriginalFrame( cv::Mat mat ) {
+    qDebug( ) << "update MAT";
+    _frameTransmitter.sendNewFrame( mat );
 }
 
 void MainWindow::paintEvent( QPaintEvent *event ) {

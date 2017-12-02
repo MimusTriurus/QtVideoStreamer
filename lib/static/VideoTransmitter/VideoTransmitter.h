@@ -6,9 +6,6 @@
 #include <Converter.h>
 
 #include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
 /**
  * @brief Передатчик видео стрима
  */
@@ -19,12 +16,13 @@ public:
     VideoTransmitter( QString host = "localhost", quint16 port = 10000, QObject *parent = nullptr );
 public slots:
     void sendNewFrame( QByteArray imgData );
+    void sendNewFrame( cv::Mat mat );
 private:
     QUdpSocket _socket;
-    void sendPacketsCount( int count );
     const int PACKET_SIZE;
     const QHostAddress HOST;
     const quint16 PORT;
+    void sendPacketsCount( int count );
 private slots:
     void onError( QAbstractSocket::SocketError errorMessage );
 };
