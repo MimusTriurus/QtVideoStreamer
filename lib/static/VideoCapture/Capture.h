@@ -6,9 +6,6 @@
 #include <QDebug>
 
 #include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc.hpp>
 
 #define DEFAULT_CAMERA_ID 0
 
@@ -40,10 +37,6 @@ public slots:
      */
     bool open( const QString &source );
 signals:
-    /**
-     * @brief новый кадр получен из источника
-     */
-    void newQFrame( const QImage & );
     /**
      * @brief новый кадр получен из источника
      */

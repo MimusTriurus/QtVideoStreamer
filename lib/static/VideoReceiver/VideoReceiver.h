@@ -23,7 +23,6 @@ private:
     QByteArray _imgBytes;
     QBuffer _buffer;
 private slots:
-    void onReceiveData( );
     void onReceiveMatData( );
 };
 

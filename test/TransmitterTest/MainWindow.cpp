@@ -6,7 +6,7 @@
 #include <QImageWriter>
 #include <ImageSerialization.h>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow( QString host, QWidget *parent ) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -16,14 +16,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     capture->open( 1 );
 
+    _frameTransmitter.host( host );
+
     connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), capture, SLOT( read( ) ) );
 
-    //connect( capture, SIGNAL( newQFrame( QImage ) ),
-             //this, SLOT( updateOriginalFrame( QImage ) ) );
     connect( capture, SIGNAL( newCvFrame( cv::Mat ) ),
              this, SLOT( updateOriginalFrame( cv::Mat ) ) );
 
-    _tmrFrameUpdate.start( 5 );
+    _tmrFrameUpdate.start( 1 );
 }
 
 MainWindow::~MainWindow( ) {
@@ -31,13 +31,13 @@ MainWindow::~MainWindow( ) {
 }
 
 void MainWindow::updateOriginalFrame( const QImage &qOriginalFrame ) {
-    _frameTransmitter.sendNewFrame( ImageSerialization::serializeImg( qOriginalFrame ) );
     _background = qOriginalFrame;
     this->repaint( );
 }
 
 void MainWindow::updateOriginalFrame( cv::Mat mat ) {
-    qDebug( ) << "update MAT";
+    //_frameTransmitter.sendNewFrame( mat );
+    //cv::imshow( "test", mat );
     _frameTransmitter.sendNewFrame( mat );
 }
 

@@ -6,7 +6,7 @@
 
 #define IMG_EXT "JPG"
 
-QByteArray ImageSerialization::serializeImg( QImage img ) {
+QByteArray ImageSerialization::serializeImg( const QImage &img ) {
     QBuffer buffer;
     QImageWriter writer( &buffer, IMG_EXT );
     writer.write( img );
@@ -22,38 +22,18 @@ QImage ImageSerialization::deserializeImg( QByteArray imgData ) {
     return img;
 }
 
-QByteArray ImageSerialization::serializeMat( cv::Mat mat ) {
-    if ( !mat.data ) {
-        qDebug( ) <<  "Could not open or find the image";
-        return nullptr;
-    }
-    cv::cvtColor( mat, mat, CV_BGR2BGRA );
-    QByteArray outBytes;
-    QDataStream outStream{ &outBytes, QIODevice::WriteOnly };
-    outStream << mat.rows;
-    outStream << mat.cols;
-    outStream << mat.type( );
-    QByteArray imgBytes{ ( char* )( mat.data ) };
-    outStream << imgBytes;
-    //qDebug( ) << "receive" << mat.rows << mat.cols << imgBytes.count( );
-    return outBytes;
+QByteArray ImageSerialization::serializeMat( const cv::Mat &mat , int quality ) {
+    std::vector<uchar> buffer;
+    std::vector<int> compressionParams = std::vector<int>( 2 );
+    compressionParams[ 0 ] = 1;
+    compressionParams[ 1 ] = quality;
+    cv::imencode( ".jpg", mat, buffer, compressionParams );
+    QByteArray result = QByteArray::fromRawData( reinterpret_cast<const char*>( buffer.data( ) ), buffer.size( ) );
+    return result;
 }
 
-cv::Mat ImageSerialization::deserializeMat( QByteArray matData ) {
-    int rows{ 0 };
-    int cols{ 0 };
-    int type{ CV_8UC4 };
-    QByteArray imgBytes;
-    QByteArray inBytes{ matData };
-    QDataStream inStream{ &inBytes, QIODevice::ReadOnly };
-    inStream >> rows;
-    inStream >> cols;
-    inStream >> type;
-    inStream >> imgBytes;
-    cv::Mat img = cv::Mat{ rows, cols, type, imgBytes.data( ) };
-    if ( imgBytes.count( ) >= ( imgBytes.count( ) * 4096 ) )
-        cv::imshow( "Display window", img );
-    else
-        qDebug( ) << "receive" << rows << cols << type << imgBytes.count( );
-    return img;
+cv::Mat ImageSerialization::deserializeMat( const QByteArray &matData ) {
+    std::vector<uchar> buffer( matData.begin( ), matData.end( ) );
+    cv::Mat result = cv::imdecode( cv::Mat( buffer ), 1 );
+    return result;
 }
