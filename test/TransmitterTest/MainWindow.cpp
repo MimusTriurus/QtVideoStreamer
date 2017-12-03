@@ -14,7 +14,7 @@ MainWindow::MainWindow( QString host, QWidget *parent ) :
 
     capture = new Capture( this );
 
-    capture->open( 1 );
+    capture->open( 0 );
 
     _frameTransmitter.host( host );
 
@@ -43,7 +43,9 @@ void MainWindow::updateOriginalFrame( cv::Mat mat ) {
 
 void MainWindow::paintEvent( QPaintEvent *event ) {
     Q_UNUSED( event )
+    /*
     if ( _background.isNull( ) ) return;
     QPainter painter( this );
     painter.drawImage( 0, 0, _background.scaled( this->size( ) ) );
+    */
 }

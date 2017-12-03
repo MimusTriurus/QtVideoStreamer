@@ -15,9 +15,11 @@ MainWindow::~MainWindow( ) {
 
 void MainWindow::paintEvent( QPaintEvent *event ) {
     Q_UNUSED( event )
+/*  Segmentation fault on Ubuntu and Raspbian
     if ( _background.isNull( ) ) return;
     QPainter painter( this );
     painter.drawImage( 0, 0, _background.scaled( this->size( ) ) );
+*/
 }
 
 void MainWindow::onReceiveImg( QImage &frame ) {

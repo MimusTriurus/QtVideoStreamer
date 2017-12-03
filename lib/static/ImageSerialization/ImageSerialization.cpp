@@ -33,7 +33,7 @@ QByteArray ImageSerialization::serializeMat( const cv::Mat &mat , int quality ) 
 }
 
 cv::Mat ImageSerialization::deserializeMat( const QByteArray &matData ) {
-    std::vector<uchar> buffer( matData.begin( ), matData.end( ) );
+    std::vector<uchar> buffer( matData.cbegin( ), matData.cend( ) );
     cv::Mat result = cv::imdecode( cv::Mat( buffer ), 1 );
     return result;
 }
