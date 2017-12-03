@@ -24,7 +24,7 @@ private:
     QHostAddress _host;
     quint16 _port;
     void sendPacketsCount( int count );
-    void sendFrameData( QByteArray &imgData );
+    void sendFrameData( QByteArray &&imgData );
 private slots:
     void onError( QAbstractSocket::SocketError errorMessage );
 };

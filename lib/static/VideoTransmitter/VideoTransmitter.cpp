@@ -23,7 +23,7 @@ void VideoTransmitter::port( quint16 port ) {
     _port = port;
 }
 
-void VideoTransmitter::sendFrameData( QByteArray &imgData ) {
+void VideoTransmitter::sendFrameData( QByteArray &&imgData ) {
     int totalPack = 1 + ( imgData.size( ) - 1 ) / PACKET_SIZE;
     sendPacketsCount( totalPack );
 
