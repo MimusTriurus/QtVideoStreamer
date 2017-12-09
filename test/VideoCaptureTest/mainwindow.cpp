@@ -39,6 +39,7 @@ void MainWindow::onNewCvFrame( cv::Mat frame ) {
 }
 
 void MainWindow::paintEvent( QPaintEvent *event ) {
+    Q_UNUSED( event )
     QPainter painter( this );
-    painter.drawImage(0, 0, _background.scaled( this->size( ) ) );
+    painter.drawImage( 0, 0, _background.scaled( this->size( ) ) );
 }

@@ -26,10 +26,14 @@ void VideoTransmitter::port( quint16 port ) {
 void VideoTransmitter::sendFrameData( QByteArray &&imgData ) {
     int totalPack = 1 + ( imgData.size( ) - 1 ) / PACKET_SIZE;
     sendPacketsCount( totalPack );
-
-    while ( !imgData.isEmpty( ) ) {
-        _socket.writeDatagram( imgData.mid( 0, PACKET_SIZE ), _host, _port );
-        imgData.remove( 0, PACKET_SIZE );
+    //qDebug( ) << "packet count:" << totalPack;
+    _socket.writeDatagram( imgData , _host, _port );
+    int i{ 0 };
+    while ( i < totalPack ) {
+        QByteArray bytes{ imgData.mid( i*PACKET_SIZE, PACKET_SIZE ) };
+        _socket.writeDatagram( bytes , _host, _port );
+        i++;
+        //qDebug( ) << "send packet" << i << "from" << totalPack;
     }
 }
 

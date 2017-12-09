@@ -22,7 +22,7 @@ private:
     QImage _background;
     QTimer _tmrFrameUpdate;
     const std::string CV_WIN_NAME{ "win" };
-    const int CAMERA_ID{ 1 };
+    const int CAMERA_ID{ 0 };
     const int UPDATE_FRAME_INTERVAL{ 5 };
 private slots:
     void onNewQFrame( QImage frame );

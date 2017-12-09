@@ -17,13 +17,14 @@ MainWindow::MainWindow( QString host, QWidget *parent ) :
     capture->open( 0 );
 
     _frameTransmitter.host( host );
+    _frameTransmitter.setQuality( 60 );
 
     connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), capture, SLOT( read( ) ) );
 
     connect( capture, SIGNAL( newCvFrame( cv::Mat ) ),
              this, SLOT( updateOriginalFrame( cv::Mat ) ) );
 
-    _tmrFrameUpdate.start( 1 );
+    _tmrFrameUpdate.start( 5 );
 }
 
 MainWindow::~MainWindow( ) {
@@ -36,16 +37,14 @@ void MainWindow::updateOriginalFrame( const QImage &qOriginalFrame ) {
 }
 
 void MainWindow::updateOriginalFrame( cv::Mat mat ) {
-    //_frameTransmitter.sendNewFrame( mat );
-    //cv::imshow( "test", mat );
     _frameTransmitter.sendNewFrame( mat );
 }
 
 void MainWindow::paintEvent( QPaintEvent *event ) {
     Q_UNUSED( event )
-    /*
+
     if ( _background.isNull( ) ) return;
     QPainter painter( this );
     painter.drawImage( 0, 0, _background.scaled( this->size( ) ) );
-    */
+
 }
