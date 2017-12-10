@@ -1,7 +1,4 @@
 #include "Capture.h"
-
-#include <QtCore>
-#include <QImage>
 #include <QDebug>
 
 Capture::Capture( QObject *parent ) :
@@ -34,15 +31,14 @@ bool Capture::read( ) {
         qDebug( "Frame is empty!" );
         return false;
     }
-    /*
-    cv::resize( cvFrame, cvFrame, cv::Size( ), 0.5, 0.5 );
+    //cv::resize( cvFrame, cvFrame, cv::Size( ), 0.5, 0.5 );
     cv::cvtColor( cvFrame, cvFrame, CV_BGR2RGB );
     QImage qFrame( ( uchar* )cvFrame.data,
                            cvFrame.cols,
                            cvFrame.rows,
                            cvFrame.step,
                            QImage::Format_RGB888 ) ;
-    */
+    emit newQImage ( qFrame );
     emit newCvFrame( cvFrame );
     return true;
 }

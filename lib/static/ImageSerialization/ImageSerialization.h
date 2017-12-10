@@ -11,7 +11,7 @@ class ImageSerialization
 public:
     ImageSerialization( ) = delete;
     static QByteArray serializeImg( const QImage &img );
-    static QImage deserializeImg( QByteArray imgData );
+    static QImage deserializeImg( QByteArray &imgData );
 
     static QByteArray serializeMat( const cv::Mat &mat, int quality = 80 );
     static cv::Mat deserializeMat( const QByteArray &matData );

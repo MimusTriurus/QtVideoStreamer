@@ -21,7 +21,6 @@ private:
     QUdpSocket _server;
     int _packetCount;
     QByteArray _imgBytes;
-    QBuffer _buffer;
 private slots:
     void onReceiveMatData( );
 };

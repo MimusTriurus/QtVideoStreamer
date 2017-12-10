@@ -6,6 +6,8 @@
 #include <QImageWriter>
 #include <ImageSerialization.h>
 
+#include <opencv2/core/core.hpp>
+
 MainWindow::MainWindow( QString host, QWidget *parent ) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -16,13 +18,17 @@ MainWindow::MainWindow( QString host, QWidget *parent ) :
 
     capture->open( 0 );
 
-    _frameTransmitter.host( host );
-    _frameTransmitter.setQuality( 60 );
+    _frameTransmitterByUdp.host( host );
+    _frameTransmitterByUdp.setQuality( 20 );
+
+    _frameTransmitterByTcp.connectToHost( host, 65000 );
 
     connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), capture, SLOT( read( ) ) );
 
-    connect( capture, SIGNAL( newCvFrame( cv::Mat ) ),
-             this, SLOT( updateOriginalFrame( cv::Mat ) ) );
+    //connect( capture, SIGNAL( newCvFrame( cv::Mat ) ),
+             //this, SLOT( updateOriginalFrame( cv::Mat ) ) );
+    connect( capture, SIGNAL( newQImage( QImage ) ),
+             this, SLOT( updateOriginalFrame( QImage ) ) );
 
     _tmrFrameUpdate.start( 5 );
 }
@@ -32,19 +38,21 @@ MainWindow::~MainWindow( ) {
 }
 
 void MainWindow::updateOriginalFrame( const QImage &qOriginalFrame ) {
-    _background = qOriginalFrame;
-    this->repaint( );
+    //_background = qOriginalFrame;
+    //this->repaint( );
+    _frameTransmitterByUdp.sendQImage( qOriginalFrame );
 }
 
 void MainWindow::updateOriginalFrame( cv::Mat mat ) {
-    _frameTransmitter.sendNewFrame( mat );
+    _frameTransmitterByUdp.sendNewFrame( mat );
+    _frameTransmitterByTcp.sendNewFrame( mat );
 }
 
 void MainWindow::paintEvent( QPaintEvent *event ) {
     Q_UNUSED( event )
-
+/*
     if ( _background.isNull( ) ) return;
     QPainter painter( this );
     painter.drawImage( 0, 0, _background.scaled( this->size( ) ) );
-
+*/
 }

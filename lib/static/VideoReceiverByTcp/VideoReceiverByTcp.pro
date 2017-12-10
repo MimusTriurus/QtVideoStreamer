@@ -1,19 +1,34 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-11-11T14:48:04
+# Project created by QtCreator 2017-12-10T10:14:56
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += widgets network
 
-TARGET = VideoTransmitter
+QT       -= gui
+
+TARGET = VideoReceiverByTcp
 TEMPLATE = lib
 CONFIG += staticlib
 CONFIG += c++11
 
-SOURCES += VideoTransmitter.cpp
+# The following define makes your compiler emit warnings if you use
+# any feature of Qt which has been marked as deprecated (the exact warnings
+# depend on your compiler). Please consult the documentation of the
+# deprecated API in order to know how to port your code away from it.
+DEFINES += QT_DEPRECATED_WARNINGS
 
-HEADERS += VideoTransmitter.h
+# You can also make your code fail to compile if you use deprecated APIs.
+# In order to do so, uncomment the following line.
+# You can also select to disable deprecated APIs only up to a certain version of Qt.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+SOURCES += \
+        VideoReceiverByTcp.cpp
+
+HEADERS += \
+        VideoReceiverByTcp.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
@@ -24,10 +39,12 @@ unix {
     PKGCONFIG += opencv
 }
 
-win32 {
-    LIBS += -LC:/opencv2/opencv/build/x64/vc14/lib/*
-    INCLUDEPATH += C:/opencv2/opencv/build/include
-    DEPENDPATH += C:/opencv2/opencv/build/include
+win32 { LIBS += -L$$PWD/../../dependencies/lib/ -lopencv_core2413 \
+    -lopencv_highgui2413 \
+    -lopencv_imgproc2413
+
+    INCLUDEPATH += $$PWD/../../../dependencies/include
+    DEPENDPATH += $$PWD/../../../dependencies/include
 }
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ImageSerialization/release/ -lImageSerialization

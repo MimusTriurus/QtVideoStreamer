@@ -2,10 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPainter>
+
 #include <Capture.h>
 #include <VideoTransmitter.h>
-#include <QUdpSocket>
-#include <QPainter>
+#include <VideoTransmitterByTcp.h>
 
 #include "opencv2/opencv.hpp"
 
@@ -26,7 +27,8 @@ private:
     Capture *capture;
     QImage _background;
     QTimer _tmrFrameUpdate;
-    VideoTransmitter _frameTransmitter{ "127.0.0.1", 10000 };
+    VideoTransmitter      _frameTransmitterByUdp{ "127.0.0.1", 10000 };
+    VideoTransmitterByTcp _frameTransmitterByTcp;
 private slots:
     void updateOriginalFrame( const QImage &qOriginalFrame );
     void updateOriginalFrame( cv::Mat mat );

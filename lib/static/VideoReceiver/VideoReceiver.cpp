@@ -1,7 +1,6 @@
 #include "VideoReceiver.h"
-#include <QImageReader>
 #include <ImageSerialization.h>
-#include <QBuffer>
+#include <QDebug>
 
 VideoReciever::VideoReciever( quint16 port, QObject *parent ) : QObject( parent ) {
     _server.bind( QHostAddress::Any, port );
@@ -19,7 +18,8 @@ void VideoReciever::onReceiveMatData( ) {
             QDataStream stream( datagram );
             stream >> _packetCount;
             if ( _imgBytes.count( ) != 0 ) {
-                emit matReceived( ImageSerialization::deserializeMat( _imgBytes ) );
+                //emit matReceived( ImageSerialization::deserializeMat( _imgBytes ) );
+                emit imageReceived( ImageSerialization::deserializeImg( _imgBytes ) );
             }
             _imgBytes.clear( );
             return;

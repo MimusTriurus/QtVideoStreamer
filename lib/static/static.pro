@@ -7,5 +7,7 @@ SUBDIRS +=              \
     VideoCapture         \
     VideoTransmitter     \
     VideoReceiver        \
+    VideoTransmitterByTcp \
+    VideoReceiverByTcp
 
 

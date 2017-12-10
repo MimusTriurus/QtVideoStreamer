@@ -15,7 +15,7 @@ QByteArray ImageSerialization::serializeImg( const QImage &img ) {
     return data;
 }
 
-QImage ImageSerialization::deserializeImg( QByteArray imgData ) {
+QImage ImageSerialization::deserializeImg( QByteArray &imgData ) {
     QBuffer buffer( &imgData );
     QImageReader reader( &buffer, IMG_EXT );
     QImage img( reader.read( ) );
