@@ -9,13 +9,12 @@
 /**
  * @brief Приемник видеопотока
  */
-class VideoReciever : public QObject
-{
+class VideoReciever : public QObject {
     Q_OBJECT
 public:
-    explicit VideoReciever( quint16 port = 10000, QObject *parent = nullptr );
+    explicit VideoReciever( QObject *parent = nullptr );
+    void listen( const quint16 port );
 signals:
-    void imageReceived( QImage img );
     void matReceived( cv::Mat mat );
 private:
     QUdpSocket _server;

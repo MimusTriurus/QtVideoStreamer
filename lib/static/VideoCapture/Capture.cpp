@@ -6,10 +6,11 @@ Capture::Capture( QObject *parent ) :
 
 }
 
-bool Capture::open( int deviceId ) {
+bool Capture::open( const int deviceId ) {
     _cap.open( deviceId );
     if( _cap.isOpened( ) == false ) {
-        qDebug( ) << "Camera not successfully connected.";
+        qDebug( ) << "Camera " << deviceId << "is not available";
+        emit onError( "Camera " + QString::number( deviceId )  + " is not available" );
         return false;
     }
     return true;
@@ -18,7 +19,8 @@ bool Capture::open( int deviceId ) {
 bool Capture::open( const QString &source ) {
     _cap.open( source.toUtf8( ).data( ) );
     if ( _cap.isOpened( ) == false ) {
-        qDebug( ) << "Source " << source << "not available";
+        qDebug( ) << "Source " << source << " is not available";
+        emit onError( "Source " + source + " is not available" );
         return false;
     }
     return true;
@@ -29,16 +31,9 @@ bool Capture::read( ) {
     _cap.read( cvFrame );
     if ( cvFrame.empty( ) == true ) {
         qDebug( "Frame is empty!" );
+        emit onError( "Frame is empty!" );
         return false;
     }
-    //cv::resize( cvFrame, cvFrame, cv::Size( ), 0.5, 0.5 );
-    cv::cvtColor( cvFrame, cvFrame, CV_BGR2RGB );
-    QImage qFrame( ( uchar* )cvFrame.data,
-                           cvFrame.cols,
-                           cvFrame.rows,
-                           cvFrame.step,
-                           QImage::Format_RGB888 ) ;
-    emit newQImage ( qFrame );
     emit newCvFrame( cvFrame );
     return true;
 }

@@ -38,10 +38,6 @@ void VideoTransmitter::sendNewFrame( const cv::Mat &mat ) {
     sendFrameData( ImageSerialization::serializeMat( mat, _quality ) );
 }
 
-void VideoTransmitter::sendQImage( QImage img ) {
-    sendFrameData( ImageSerialization::serializeImg( img ) );
-}
-
 void VideoTransmitter::onError( QAbstractSocket::SocketError errorMessage ) {
     QString strError =
         "Error: " + ( errorMessage == QAbstractSocket::HostNotFoundError ?
@@ -52,6 +48,7 @@ void VideoTransmitter::onError( QAbstractSocket::SocketError errorMessage ) {
                      "The connection was refused." :
                      QString( _socket.errorString( ) )
                     );
+    emit onError( strError );
     qDebug( ) << "error:" << strError;
 }
 

@@ -13,8 +13,7 @@
  * @brief Предназначен для получения кадров в формате QImage, cv::Mat
  * из различных исчников видео информации
  */
-class Capture : public QObject
-{
+class Capture : public QObject {
     Q_OBJECT
 public:
     explicit Capture( QObject *parent = nullptr );
@@ -29,7 +28,7 @@ public slots:
      * @param deviceId идентификатор камеры
      * @return успешное\не успешное получение доступа к камере
      */
-    bool open( int deviceId = DEFAULT_CAMERA_ID );
+    bool open( const int deviceId = DEFAULT_CAMERA_ID );
     /**
      * @brief получение доступа к иному источнику видео
      * @param source источник видео (файл, url, udp, rtsp )
@@ -40,8 +39,11 @@ signals:
     /**
      * @brief новый кадр получен из источника
      */
-    void newCvFrame( cv::Mat );
-    void newQImage( QImage );
+    void newCvFrame( const cv::Mat & );
+    /**
+     * @brief сообщение об ошибке
+     */
+    void onError( const QString & );
 private:
     cv::VideoCapture _cap;
 };

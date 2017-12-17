@@ -2,11 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPainter>
+#include <QLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QPushButton>
+#include <QCheckBox>
 
 #include <Capture.h>
 #include <VideoTransmitter.h>
-#include <VideoTransmitterByTcp.h>
 
 #include "opencv2/opencv.hpp"
 
@@ -14,27 +18,29 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
-    explicit MainWindow( QString host, QWidget *parent = nullptr );
-    ~MainWindow();
-
+    explicit MainWindow( QWidget *parent = nullptr );
+    ~MainWindow( );
 private:
     Ui::MainWindow *ui;
-    Capture *capture;
+    Capture _capture;
     QImage _background;
     QTimer _tmrFrameUpdate;
-    VideoTransmitter      _frameTransmitterByUdp{ "127.0.0.1", 10000 };
-    VideoTransmitterByTcp _frameTransmitterByTcp;
+    VideoTransmitter _transmitter;
+
+    QLineEdit _cameraId{ "0" };
+    QLineEdit _host{ "127.0.0.1" };
+    QLineEdit _port{ "10000" };
+    QTextEdit _log;
+    QCheckBox _showFrameWin{ "Show frame window" };
+
+    void initInterface( );
 private slots:
-    void updateOriginalFrame( const QImage &qOriginalFrame );
-    void updateOriginalFrame( cv::Mat mat );
-    // QWidget interface
-protected:
-    void paintEvent( QPaintEvent *event );
+    void onBtnStart( );
+    void onCrash( const QString &crashMessage );
+    void onUpdateFrame( const cv::Mat &frame );
 };
 
 #endif // MAINWINDOW_H

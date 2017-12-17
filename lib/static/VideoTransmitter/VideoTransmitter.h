@@ -16,12 +16,13 @@ public:
     void setQuality( const int quality );
     void host( const QString &host );
     void port( const quint16 port );
+signals:
+    void onError( const QString & );
 public slots:
     void sendNewFrame( const cv::Mat &mat );
-    void sendQImage( QImage img );
 private:
     QUdpSocket _socket;
-    int _quality{ 90 };
+    int _quality{ 55 };
     const int PACKET_SIZE;
     QHostAddress _host;
     quint16 _port;

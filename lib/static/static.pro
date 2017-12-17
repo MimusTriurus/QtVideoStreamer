@@ -6,8 +6,4 @@ SUBDIRS +=              \
     ImageSerialization  \
     VideoCapture         \
     VideoTransmitter     \
-    VideoReceiver        \
-    VideoTransmitterByTcp \
-    VideoReceiverByTcp
-
-
+    VideoReceiver
