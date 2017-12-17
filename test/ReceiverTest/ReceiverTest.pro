@@ -79,16 +79,3 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../l
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/ImageSerialization/release/ImageSerialization.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/ImageSerialization/debug/ImageSerialization.lib
 else:unix:!macx: PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/ImageSerialization/libImageSerialization.a
-
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/VideoReceiverByTcp/release/ -lVideoReceiverByTcp
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/VideoReceiverByTcp/debug/ -lVideoReceiverByTcp
-else:unix:!macx: LIBS += -L$$OUT_PWD/../../lib/static/VideoReceiverByTcp/ -lVideoReceiverByTcp
-
-INCLUDEPATH += $$PWD/../../lib/static/VideoReceiverByTcp
-DEPENDPATH += $$PWD/../../lib/static/VideoReceiverByTcp
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/VideoReceiverByTcp/release/libVideoReceiverByTcp.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/VideoReceiverByTcp/debug/libVideoReceiverByTcp.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/VideoReceiverByTcp/release/VideoReceiverByTcp.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/VideoReceiverByTcp/debug/VideoReceiverByTcp.lib
-else:unix:!macx: PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/VideoReceiverByTcp/libVideoReceiverByTcp.a
