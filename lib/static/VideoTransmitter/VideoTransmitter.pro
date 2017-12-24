@@ -25,9 +25,11 @@ unix {
 }
 
 win32 {
-    LIBS += -LC:/opencv2/opencv/build/x64/vc14/lib/*
-    INCLUDEPATH += C:/opencv2/opencv/build/include
-    DEPENDPATH += C:/opencv2/opencv/build/include
+    include(../../../config.pri)
+    LIBS += $$OPENCV_LIBS_PATH $$OPENCV_LIB_CORE
+
+    INCLUDEPATH += $$OPENCV_INCLUDEPATH
+    DEPENDPATH += $$OPENCV_DEPENDPATH
 }
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ImageSerialization/release/ -lImageSerialization

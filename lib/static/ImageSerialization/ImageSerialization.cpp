@@ -28,7 +28,8 @@ QByteArray ImageSerialization::serializeMat( const cv::Mat &mat , int quality ) 
     compressionParams[ 0 ] = 1;
     compressionParams[ 1 ] = quality;
     cv::imencode( ".jpg", mat, buffer, compressionParams );
-    QByteArray result = QByteArray::fromRawData( reinterpret_cast<const char*>( buffer.data( ) ), buffer.size( ) );
+    QByteArray result = QByteArray::fromRawData( reinterpret_cast<const char*>( buffer.data( ) ),
+                                                 static_cast<int>( buffer.size( ) ) );
     return result;
 }
 

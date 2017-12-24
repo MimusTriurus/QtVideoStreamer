@@ -26,10 +26,10 @@ unix {
     PKGCONFIG += opencv
 }
 
-win32 { LIBS += -L$$PWD/../../dependencies/lib/ -lopencv_core2413 \
-    -lopencv_highgui2413 \
-    -lopencv_imgproc2413
+win32 {
+    include( ../../../config.pri )
+    LIBS += $$OPENCV_LIBS_PATH $$OPENCV_LIB_CORE
 
-    INCLUDEPATH += $$PWD/../../../dependencies/include
-    DEPENDPATH += $$PWD/../../../dependencies/include
+    INCLUDEPATH += $$OPENCV_INCLUDEPATH
+    DEPENDPATH += $$OPENCV_DEPENDPATH
 }

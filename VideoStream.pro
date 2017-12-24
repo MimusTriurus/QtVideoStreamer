@@ -2,8 +2,9 @@ TEMPLATE = subdirs
 
 CONFIG += ordered
 
+include(config.pri)
+
 SUBDIRS += \
-    opencv_conf \
     lib \
     app \
-    test \
+    test
