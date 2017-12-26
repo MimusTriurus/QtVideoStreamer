@@ -14,8 +14,8 @@ void VideoReciever::onReceiveMatData( ) {
     while ( _server.hasPendingDatagrams( ) ) {
         QByteArray datagram;
         datagram.resize( _server.pendingDatagramSize( ) );
-        QHostAddress *address = new QHostAddress( );
-        _server.readDatagram( datagram.data( ), datagram.size( ), address );
+        QHostAddress address;
+        _server.readDatagram( datagram.data( ), datagram.size( ), &address );
         int msgSize{ datagram.size( ) };
         if ( msgSize == sizeof( int ) ) {
             QDataStream stream( datagram );

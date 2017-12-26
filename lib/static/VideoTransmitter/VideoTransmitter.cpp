@@ -2,10 +2,9 @@
 #include <ImageSerialization.h>
 
 VideoTransmitter::VideoTransmitter( QString host, quint16 port, QObject *parent ) :
+    QObject{ parent },
     _host{ host },
-    _port{ port },
-    PACKET_SIZE{ 4096 },
-    QObject{ parent }
+    _port{ port }
 {
     connect( &_socket, SIGNAL( error( QAbstractSocket::SocketError ) ),
              this, SLOT( onError( QAbstractSocket::SocketError ) ) );

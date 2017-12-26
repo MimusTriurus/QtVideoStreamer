@@ -23,7 +23,7 @@ public slots:
 private:
     QUdpSocket _socket;
     int _quality{ 55 };
-    const int PACKET_SIZE;
+    const int PACKET_SIZE{ 4096 };
     QHostAddress _host;
     quint16 _port;
     void sendPacketsCount( const int count );
