@@ -8,7 +8,7 @@
 #include <QCameraInfo>
 #include <QCameraImageCapture>
 
-#include "CameraFrameGrabber.h"
+#include <QVideoCapture.h>
 
 namespace Ui {
 class MainWindow;
@@ -23,15 +23,13 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QCamera             _camera{ QCameraInfo::defaultCamera( ) };
+    QVideoCapture       _camera{ QCameraInfo::defaultCamera( ) };
     QImage              _capturedFrame;
-    CameraFrameGrabber  _frameGrabber;
     void init( );
     // QWidget interface
 protected:
     void paintEvent( QPaintEvent * );
 private slots:
-    void readyForCapture( bool ready );
     void onGrabImg( const QImage &img );
 };
 

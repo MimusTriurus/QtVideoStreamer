@@ -14,8 +14,7 @@ MainWindow::~MainWindow( ) {
 }
 
 void MainWindow::init( ) {
-    _camera.setViewfinder( &_frameGrabber );
-    connect( &_frameGrabber, SIGNAL( grabImg( QImage ) ),
+    connect( &_camera, SIGNAL( grabed( QImage ) ),
              this, SLOT( onGrabImg( QImage ) ) );
     _camera.start( );
 }
@@ -23,10 +22,6 @@ void MainWindow::init( ) {
 void MainWindow::paintEvent( QPaintEvent * ) {
     QPainter painter( this );
     painter.drawImage( 0,0, _capturedFrame );
-}
-
-void MainWindow::readyForCapture( bool ready ) {
-    qDebug( ) << "ready for capture:" + ready;
 }
 
 void MainWindow::onGrabImg( const QImage &img ) {

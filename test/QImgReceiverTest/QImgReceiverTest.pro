@@ -16,7 +16,7 @@ CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = ReceiverTest
+TARGET = QImgReceiverTest
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -33,29 +33,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        MainWindow.cpp
+        MainWindow.cpp \
+    FrameWindow.cpp
 
 HEADERS += \
-        MainWindow.h
+        MainWindow.h \
+    FrameWindow.h
 
 FORMS += \
         MainWindow.ui
-
-unix {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += opencv
-}
-
-win32 {
-    include(../../config.pri)
-    LIBS += $$OPENCV_LIBS_PATH $$OPENCV_LIB_CORE \
-    $$OPENCV_LIB_IMGPROC \
-    $$OPENCV_LIB_HIGHGUI
-
-    INCLUDEPATH += $$OPENCV_INCLUDEPATH
-    DEPENDPATH += $$OPENCV_DEPENDPATH
-}
-
+######################## VideoReceiver #########################################
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/VideoReceiver/release/ -lVideoReceiver
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/VideoReceiver/debug/ -lVideoReceiver
 else:unix:!macx: LIBS += -L$$OUT_PWD/../../lib/static/VideoReceiver/ -lVideoReceiver
@@ -68,7 +55,7 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../l
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/VideoReceiver/release/VideoReceiver.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/VideoReceiver/debug/VideoReceiver.lib
 else:unix:!macx: PRE_TARGETDEPS += $$OUT_PWD/../../lib/static/VideoReceiver/libVideoReceiver.a
-
+######################## ImageSerialization ####################################
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/ImageSerialization/release/ -lImageSerialization
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/ImageSerialization/debug/ -lImageSerialization
 else:unix:!macx: LIBS += -L$$OUT_PWD/../../lib/static/ImageSerialization/ -lImageSerialization

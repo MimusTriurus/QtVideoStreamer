@@ -1,16 +1,15 @@
 #include "VideoReceiver.h"
-#include <ImageSerialization.h>
 #include <QDebug>
 
 VideoReciever::VideoReciever( QObject *parent ) : QObject( parent ) {
-    connect( &_server, &QUdpSocket::readyRead, this, &VideoReciever::onReceiveMatData );
+    connect( &_server, &QUdpSocket::readyRead, this, &VideoReciever::onReceiveData );
 }
 
 void VideoReciever::listen( const quint16 port ) {
     _server.bind( QHostAddress::Any, port );
 }
 
-void VideoReciever::onReceiveMatData( ) {
+void VideoReciever::onReceiveData( ) {
     while ( _server.hasPendingDatagrams( ) ) {
         QByteArray datagram;
         datagram.resize( _server.pendingDatagramSize( ) );
@@ -21,7 +20,7 @@ void VideoReciever::onReceiveMatData( ) {
             QDataStream stream( datagram );
             stream >> _packetCount;
             if ( _imgBytes.count( ) != 0 ) {
-                emit matReceived( ImageSerialization::deserializeMat( _imgBytes ) );
+                emit imgDataReceived( _imgBytes );
             }
             _imgBytes.clear( );
             return;

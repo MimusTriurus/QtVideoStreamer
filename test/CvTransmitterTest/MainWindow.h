@@ -8,6 +8,7 @@
 #include <QTextEdit>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QTimer>
 
 #include <Capture.h>
 #include <VideoTransmitter.h>
@@ -24,17 +25,17 @@ public:
     explicit MainWindow( QWidget *parent = nullptr );
     ~MainWindow( );
 private:
-    Ui::MainWindow *ui;
-    Capture _capture;
-    QImage _background;
-    QTimer _tmrFrameUpdate;
-    VideoTransmitter _transmitter;
+    Ui::MainWindow      *ui;
 
-    QLineEdit _cameraId{ "0" };
-    QLineEdit _host{ "127.0.0.1" };
-    QLineEdit _port{ "10000" };
-    QTextEdit _log;
-    QCheckBox _showFrameWin{ "Show frame window" };
+    Capture             _capture;
+    QTimer              _tmrFrameUpdate;
+    VideoTransmitter    _transmitter;
+
+    QLineEdit           _cameraId{ "0" };
+    QLineEdit           _host{ "127.0.0.1" };
+    QLineEdit           _port{ "10000" };
+    QTextEdit           _log;
+    QCheckBox           _showFrameWin{ "Show frame window" };
 
     void initInterface( );
 private slots:

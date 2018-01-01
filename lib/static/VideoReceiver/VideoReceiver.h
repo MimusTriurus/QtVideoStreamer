@@ -4,7 +4,6 @@
 #include <QtCore>
 #include <QUdpSocket>
 #include <QImage>
-#include "opencv2/opencv.hpp"
 
 /**
  * @brief Приемник видеопотока
@@ -15,13 +14,13 @@ public:
     explicit VideoReciever( QObject *parent = nullptr );
     void listen( const quint16 port );
 signals:
-    void matReceived( cv::Mat mat );
+    void imgDataReceived( const QByteArray & );
 private:
     QUdpSocket _server;
     int _packetCount;
     QByteArray _imgBytes;
 private slots:
-    void onReceiveMatData( );
+    void onReceiveData( );
 };
 
 #endif // VIDEORECIEVER_H

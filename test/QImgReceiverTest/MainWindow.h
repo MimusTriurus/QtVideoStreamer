@@ -8,7 +8,8 @@
 #include <QPushButton>
 
 #include <VideoReceiver.h>
-#include "opencv2/opencv.hpp"
+
+#include "FrameWindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,11 +23,12 @@ public:
     ~MainWindow( );
 private:
     Ui::MainWindow *ui;
+    FrameWindow _frameWin;
     QLineEdit _port{ "10000" };
     VideoReciever _receiver;
     void initInterface( );
 private slots:
-    void onReceiveImg( const cv::Mat &img );
+    void onReceiveData( const QByteArray &data );
 };
 
 #endif // MAINWINDOW_H

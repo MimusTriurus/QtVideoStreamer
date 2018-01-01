@@ -1,21 +1,19 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-11-11T12:54:37
+# Project created by QtCreator 2018-01-01T14:02:18
 #
 #-------------------------------------------------
-QT       += core widgets
+
 QT       -= gui
 
-TARGET = VideoCapture
+TARGET = MatSerialization
 TEMPLATE = lib
 CONFIG += staticlib
 CONFIG += c++11
 
-SOURCES += \
-    Capture.cpp
+SOURCES += MatSerialization.cpp
 
-HEADERS += \
-    Capture.h
+HEADERS += MatSerialization.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
@@ -27,8 +25,10 @@ unix {
 }
 
 win32 {
-    include( ../../../config.pri )
-    LIBS += $$OPENCV_LIBS_PATH $$OPENCV_LIB_CORE
+    include(../../../config.pri)
+    LIBS += $$OPENCV_LIBS_PATH $$OPENCV_LIB_CORE \
+    $$OPENCV_LIB_IMGPROC \
+    $$OPENCV_LIB_HIGHGUI
 
     INCLUDEPATH += $$OPENCV_INCLUDEPATH
     DEPENDPATH += $$OPENCV_DEPENDPATH

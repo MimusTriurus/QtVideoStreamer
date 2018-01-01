@@ -1,5 +1,4 @@
 #include "VideoTransmitter.h"
-#include <ImageSerialization.h>
 
 VideoTransmitter::VideoTransmitter( QString host, quint16 port, QObject *parent ) :
     QObject{ parent },
@@ -22,7 +21,7 @@ void VideoTransmitter::port( const quint16 port ) {
     _port = port;
 }
 
-void VideoTransmitter::sendFrameData( const QByteArray &&imgData ) {
+void VideoTransmitter::sendFrameData( const QByteArray &imgData ) {
     int totalPack = 1 + ( imgData.size( ) - 1 ) / PACKET_SIZE;
     sendPacketsCount( totalPack );
     int i{ 0 };
@@ -31,10 +30,6 @@ void VideoTransmitter::sendFrameData( const QByteArray &&imgData ) {
         _socket.writeDatagram( bytes , _host, _port );
         i++;
     }
-}
-
-void VideoTransmitter::sendNewFrame( const cv::Mat &mat ) {
-    sendFrameData( ImageSerialization::serializeMat( mat, _quality ) );
 }
 
 void VideoTransmitter::onError( QAbstractSocket::SocketError errorMessage ) {

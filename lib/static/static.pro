@@ -4,6 +4,8 @@ CONFIG += ordered
 
 SUBDIRS +=              \
     ImageSerialization  \
-    VideoCapture         \
-    VideoTransmitter     \
+    MatSerialization    \
+    QVideoCapture       \
+    CvVideoCapture      \
+    VideoTransmitter    \
     VideoReceiver

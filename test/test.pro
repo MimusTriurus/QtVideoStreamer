@@ -1,7 +1,9 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    VideoCaptureTest \
-    TransmitterTest \
-    ReceiverTest \
-    QCameraTest
+    VideoCaptureTest    \
+    CvTransmitterTest   \
+    CvReceiverTest      \
+    QCameraTest         \
+    QImgReceiverTest    \
+    QImgTransmitterTest

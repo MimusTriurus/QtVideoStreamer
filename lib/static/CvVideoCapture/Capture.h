@@ -10,8 +10,8 @@
 #define DEFAULT_CAMERA_ID 0
 
 /**
- * @brief Предназначен для получения кадров в формате QImage, cv::Mat
- * из различных исчников видео информации
+ * @brief Предназначен для получения кадров в формате cv::Mat
+ * из различных источников видео информации средствами cv::VideoCapture
  */
 class Capture : public QObject {
     Q_OBJECT

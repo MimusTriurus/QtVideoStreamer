@@ -2,11 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include <QDebug>
-#include <QTimer>
-#include <QImageWriter>
 #include <ImageSerialization.h>
-
-#include <opencv2/core/core.hpp>
 
 MainWindow::MainWindow( QWidget *parent ) :
     QMainWindow( parent ),
@@ -15,16 +11,8 @@ MainWindow::MainWindow( QWidget *parent ) :
     ui->setupUi( this );
     initInterface( );
 
-    connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ),
-             &_capture, SLOT( read( ) ) );
-
-    connect( &_capture, SIGNAL( onError( QString ) ),
-             this, SLOT( onCrash( QString ) ) );
     connect( &_transmitter, SIGNAL( onError( QString ) ),
              this, SLOT( onCrash( QString ) ) );
-
-    connect( &_capture, SIGNAL( newCvFrame( cv::Mat ) ),
-             &_transmitter, SLOT( sendNewFrame( cv::Mat ) ) );
 }
 
 MainWindow::~MainWindow( ) {
@@ -57,21 +45,21 @@ void MainWindow::initInterface( ) {
 }
 
 void MainWindow::onBtnStart( ) {
-    if ( _showFrameWin.isChecked( ) )
-        connect( &_capture, SIGNAL( newCvFrame( cv::Mat ) ),
-             this, SLOT( onUpdateFrame( cv::Mat ) ) );
-    bool camOpened = _capture.open( _cameraId.text( ).toInt( ) );
+    if ( _showFrameWin.isChecked( ) ) {
+        connect( &_qCapture, SIGNAL( grabed( QImage ) ),
+                 &_frameWnd, SLOT( drawBackgroundImg( QImage ) ) );
+        _frameWnd.show( );
+    }
     _transmitter.host( _host.text( ) );
     _transmitter.port( _port.text( ).toInt( ) );
-    if ( camOpened )
-        _tmrFrameUpdate.start( 30 );
+
+    connect( &_qCapture, SIGNAL( grabed( QImage ) ),
+             this, SLOT( onGrabImg( QImage ) ) );
+    _qCapture.start( );
 }
 
-void MainWindow::onUpdateFrame( const cv::Mat &frame ) {
-    if ( frame.data ) {
-        cv::namedWindow( "Transmitter", cv::WINDOW_AUTOSIZE );
-        cv::imshow( "Transmitter", frame );
-    }
+void MainWindow::onGrabImg( const QImage &img ) {
+    _transmitter.sendFrameData( ImageSerialization::serializeImg( img ) );
 }
 
 void MainWindow::onCrash( const QString &crashMessage ) {

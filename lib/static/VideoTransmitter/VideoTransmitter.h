@@ -5,7 +5,6 @@
 #include <QUdpSocket>
 #include <QTcpSocket>
 #include <QImage>
-#include <opencv2/core/core.hpp>
 /**
  * @brief Передатчик видео стрима
  */
@@ -19,15 +18,14 @@ public:
 signals:
     void onError( const QString & );
 public slots:
-    void sendNewFrame( const cv::Mat &mat );
+    void sendFrameData( const QByteArray &imgData );
 private:
-    QUdpSocket _socket;
-    int _quality{ 55 };
-    const int PACKET_SIZE{ 4096 };
-    QHostAddress _host;
-    quint16 _port;
+    const int       PACKET_SIZE{ 4096 };
+    QUdpSocket      _socket;
+    int             _quality{ 55 };
+    QHostAddress    _host;
+    quint16         _port;
     void sendPacketsCount( const int count );
-    void sendFrameData( const QByteArray &&imgData );
 private slots:
     void onError( QAbstractSocket::SocketError errorMessage );
 };
