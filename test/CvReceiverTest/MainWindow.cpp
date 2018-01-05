@@ -7,10 +7,10 @@ MainWindow::MainWindow( QWidget *parent ) :
     ui( new Ui::MainWindow )
 {
     ui->setupUi(this);
-    connect( &_receiver, SIGNAL( matReceived( cv::Mat ) ),
-             this, SLOT( onReceiveImg( cv::Mat ) ) );
-    connect( &_receiver, SIGNAL(imgDataReceived(QByteArray)),
+
+    connect( &_receiver, SIGNAL( imgDataReceived( QByteArray ) ),
              this, SLOT( onReceiveData( QByteArray ) ) );
+
     initInterface( );
 }
 
@@ -20,7 +20,9 @@ MainWindow::~MainWindow( ) {
 
 void MainWindow::onReceiveData( const QByteArray &data ) {
     cv::namedWindow( "Receiver", cv::WINDOW_AUTOSIZE );
-    cv::imshow( "Receiver", MatSerialization::deserializeMat( data ) );
+    cv::Mat img{ MatSerialization::deserializeMat( data ) };
+    if ( !img.empty( ) )
+        cv::imshow( "Receiver", img );
 }
 
 void MainWindow::initInterface( ) {
