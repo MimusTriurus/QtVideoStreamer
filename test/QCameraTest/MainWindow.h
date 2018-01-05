@@ -16,7 +16,6 @@ class MainWindow;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
     explicit MainWindow( QWidget *parent = nullptr );
     ~MainWindow( );
@@ -28,7 +27,7 @@ private:
     void init( );
     // QWidget interface
 protected:
-    void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * ) override;
 private slots:
     void onGrabImg( const QImage &img );
 };

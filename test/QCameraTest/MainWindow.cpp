@@ -21,7 +21,7 @@ void MainWindow::init( ) {
 
 void MainWindow::paintEvent( QPaintEvent * ) {
     QPainter painter( this );
-    painter.drawImage( 0,0, _capturedFrame );
+    painter.drawImage( 0, 0, _capturedFrame );
 }
 
 void MainWindow::onGrabImg( const QImage &img ) {
