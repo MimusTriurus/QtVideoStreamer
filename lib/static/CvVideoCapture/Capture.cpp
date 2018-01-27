@@ -2,38 +2,63 @@
 #include <QDebug>
 
 Capture::Capture( QObject *parent ) :
-    QObject( parent ) {
+    QThread( parent ) {
+}
 
+Capture::~Capture( ) {
+    if ( _work )
+        this->close( );
+    // для корректного завершения потока
+    while ( this->isRunning( ) ) {
+
+    }
+}
+
+void Capture::frameHeight( int value ) {
+    _frameHeight = value;
+}
+
+void Capture::frameWidth( int value ) {
+    _frameWidth = value;
+}
+
+void Capture::fps( int value ) {
+    _fps = value;
 }
 
 bool Capture::open( const int deviceId ) {
-    _cap.open( deviceId );
-    if( _cap.isOpened( ) == false ) {
-        qDebug( ) << "Camera " << deviceId << "is not available";
-        emit onError( "Camera " + QString::number( deviceId )  + " is not available" );
-        return false;
-    }
+    _deviceId = deviceId;
+    _work = true;
+    if ( !this->isRunning( ) )
+        this->start( );
     return true;
 }
 
-bool Capture::open( const QString &source ) {
-    _cap.open( source.toUtf8( ).data( ) );
-    if ( _cap.isOpened( ) == false ) {
-        qDebug( ) << "Source " << source << " is not available";
-        emit onError( "Source " + source + " is not available" );
-        return false;
-    }
-    return true;
+void Capture::close( ) {
+    _work = false;
 }
 
-bool Capture::read( ) {
-    cv::Mat cvFrame;
-    _cap.read( cvFrame );
-    if ( cvFrame.empty( ) == true ) {
-        qDebug( "Frame is empty!" );
-        emit onError( "Frame is empty!" );
-        return false;
+void Capture::run( ) {
+    auto cap = new cv::VideoCapture( );
+    cap->set( CV_CAP_PROP_FRAME_WIDTH, _frameWidth );
+    cap->set( CV_CAP_PROP_FRAME_HEIGHT, _frameHeight );
+    cap->set( CV_CAP_PROP_FPS, _fps );
+    cap->open( _deviceId );
+    if( cap->isOpened( ) == false ) {
+        qDebug( ) << "Camera " << _deviceId << "is not available";
+        _work = false;
     }
-    emit newCvFrame( cvFrame );
-    return true;
+    //qDebug( ) << "start thread";
+    while ( _work ) {
+        cap->read( _frame );
+    }
+    cap->release( );
+    if ( cap ) {
+        delete cap;
+    }
+    //qDebug( ) << "stop thread";
+}
+
+cv::Mat Capture::read( ) {
+    return _frame;
 }

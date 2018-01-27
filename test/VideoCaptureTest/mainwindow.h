@@ -2,7 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "Capture.h"
+#include <QLineEdit>
+#include <QPushButton>
+#include <QCheckBox>
+#include <Capture.h>
 
 namespace Ui {
 class MainWindow;
@@ -10,7 +13,6 @@ class MainWindow;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
     explicit MainWindow( QWidget *parent = nullptr );
     ~MainWindow( );
@@ -18,11 +20,17 @@ private:
     Ui::MainWindow *ui;
     Capture _capture;
     QTimer _tmrFrameUpdate;
-    const std::string CV_WIN_NAME{ "win" };
-    const int CAMERA_ID{ 0 };
+    bool _start{ false };
+    const int CAMERA_ID{ 1 };
     const int UPDATE_FRAME_INTERVAL{ 5 };
+
+    QLineEdit _camIndex{ "1" };
+    QCheckBox _showCameraWin{ "Show Camera Win" };
+    QPushButton _btnStart{ "Start" };
+    void initInterface( );
 private slots:
-    void onNewCvFrame( const cv::Mat &frame );
+    void onNewCvFrame( );
+    void onBtnStartStop( );
 };
 
 #endif // MAINWINDOW_H

@@ -14,15 +14,11 @@ MainWindow::MainWindow( QWidget *parent ) :
     initInterface( );
 
     connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ),
-             &_capture, SLOT( read( ) ) );
-
+             this, SLOT( onUpdateFrame( ) ) );
     connect( &_capture, SIGNAL( onError( QString ) ),
              this, SLOT( onCrash( QString ) ) );
     connect( &_transmitter, SIGNAL( onError( QString ) ),
              this, SLOT( onCrash( QString ) ) );
-
-    connect( &_capture, SIGNAL( newCvFrame( cv::Mat ) ),
-             this, SLOT( sendNewFrame( cv::Mat ) ) );
 }
 
 MainWindow::~MainWindow( ) {
@@ -55,19 +51,17 @@ void MainWindow::initInterface( ) {
 }
 
 void MainWindow::onBtnStart( ) {
-    connect( &_capture, SIGNAL( newCvFrame( cv::Mat ) ),
-         this, SLOT( onUpdateFrame( cv::Mat ) ) );
-
     bool camOpened = _capture.open( _cameraId.text( ).toInt( ) );
 
     _transmitter.host( _host.text( ) );
     _transmitter.port( _port.text( ).toInt( ) );
 
     if ( camOpened )
-        _tmrFrameUpdate.start( 30 );
+        _tmrFrameUpdate.start( 5 );
 }
 
-void MainWindow::onUpdateFrame( const cv::Mat &frame ) {
+void MainWindow::onUpdateFrame( ) {
+    cv::Mat frame = _capture.read( );
     if ( frame.data ) {
         if ( _showFrameWin.isChecked( ) ) {
             cv::namedWindow( "Transmitter", cv::WINDOW_AUTOSIZE );

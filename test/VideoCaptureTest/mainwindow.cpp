@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include <QDebug>
+#include <QLabel>
+#include <QLayout>
 #include <QTimer>
 
 MainWindow::MainWindow( QWidget *parent ) :
@@ -9,24 +11,45 @@ MainWindow::MainWindow( QWidget *parent ) :
     ui( new Ui::MainWindow )
 {
     ui->setupUi( this );
-
-    _capture.open( CAMERA_ID );
-
-    connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), &_capture, SLOT( read( ) ) );
-
-    connect( &_capture, SIGNAL( newCvFrame( cv::Mat ) ),
-             this, SLOT( onNewCvFrame( cv::Mat ) ) );
-
+    connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), this, SLOT( onNewCvFrame( ) ) );
     _tmrFrameUpdate.setInterval( UPDATE_FRAME_INTERVAL );
-    _tmrFrameUpdate.start( );
+    initInterface( );
+}
 
-    cv::namedWindow( CV_WIN_NAME, 1 );
+void MainWindow::initInterface( ) {
+    auto l = new QVBoxLayout( this->centralWidget( ) );
+    this->centralWidget( )->setLayout( l );
+    connect( &_btnStart, &QPushButton::clicked, this, &MainWindow::onBtnStartStop );
+    l->addWidget( new QLabel( "Camera index", this->centralWidget( ) ) );
+    l->addWidget( &_camIndex );
+    l->addWidget( &_showCameraWin );
+    l->addWidget( &_btnStart );
 }
 
 MainWindow::~MainWindow( ) {
+    _capture.close( );
     delete ui;
 }
 
-void MainWindow::onNewCvFrame( const cv::Mat &frame ) {
-    imshow( CV_WIN_NAME, frame );
+void MainWindow::onNewCvFrame( ) {
+    cv::Mat frame{ _capture.read( ) };
+    if ( !frame.empty( ) && _showCameraWin.isChecked( ) ) {
+        //cv::resize( frame, frame, cv::Size( 640, 360 ), 0, 0, cv::INTER_CUBIC );
+        imshow( "win", frame );
+    }
+}
+
+void MainWindow::onBtnStartStop( ) {
+    _start = !_start;
+    int num = _camIndex.text( ).toInt( );
+    if ( _start ) {
+        _btnStart.setText( "Stop" );
+        _capture.open( num );
+        _tmrFrameUpdate.start( );
+    }
+    else {
+        _btnStart.setText( "Start" );
+        _capture.close( );
+        _tmrFrameUpdate.stop( );
+    }
 }

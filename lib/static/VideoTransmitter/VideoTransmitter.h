@@ -3,8 +3,6 @@
 
 #include <QtCore>
 #include <QUdpSocket>
-#include <QTcpSocket>
-#include <QImage>
 /**
  * @brief Передатчик видео стрима
  */

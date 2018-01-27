@@ -41,7 +41,7 @@ private:
 private slots:
     void onBtnStart( );
     void onCrash( const QString &crashMessage );
-    void onUpdateFrame( const cv::Mat &frame );
+    void onUpdateFrame( );
 };
 
 #endif // MAINWINDOW_H
