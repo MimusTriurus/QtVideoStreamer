@@ -26,7 +26,7 @@ void VideoTransmitter::sendFrameData( const QByteArray &imgData ) {
     sendPacketsCount( totalPack );
     int i{ 0 };
     while ( i < totalPack ) {
-        QByteArray bytes{ imgData.mid( i*PACKET_SIZE, PACKET_SIZE ) };
+        QByteArray bytes{ imgData.mid( i * PACKET_SIZE, PACKET_SIZE ) };
         _socket.writeDatagram( bytes , _host, _port );
         i++;
     }
@@ -42,7 +42,7 @@ void VideoTransmitter::onError( QAbstractSocket::SocketError errorMessage ) {
                      "The connection was refused." :
                      QString( _socket.errorString( ) )
                     );
-    emit onError( strError );
+    //emit onError( strError );
     qDebug( ) << "error:" << strError;
 }
 

@@ -15,10 +15,10 @@ MainWindow::MainWindow( QWidget *parent ) :
 
     connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ),
              this, SLOT( onUpdateFrame( ) ) );
-    connect( &_capture, SIGNAL( onError( QString ) ),
-             this, SLOT( onCrash( QString ) ) );
-    connect( &_transmitter, SIGNAL( onError( QString ) ),
-             this, SLOT( onCrash( QString ) ) );
+    //connect( &_capture, SIGNAL( onError( QString ) ),
+             //this, SLOT( onCrash( QString ) ) );
+    //connect( &_transmitter, SIGNAL( onError( QString ) ),
+             //this, SLOT( onCrash( QString ) ) );
 }
 
 MainWindow::~MainWindow( ) {

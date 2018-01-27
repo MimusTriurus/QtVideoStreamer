@@ -46,6 +46,7 @@ void Capture::run( ) {
     cap->open( _deviceId );
     if( cap->isOpened( ) == false ) {
         qDebug( ) << "Camera " << _deviceId << "is not available";
+        emit onError( "Camera " << _deviceId << "is not available" );
         _work = false;
     }
     //qDebug( ) << "start thread";
