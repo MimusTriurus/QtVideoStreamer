@@ -33,12 +33,12 @@ Setup for Windows:
 ----------------------------------------------
 1. Clone the repository;
 2. If required, specify in file config.pri the path to directory of opencv libraries, the name of the libraries and the path to header files (by default  config.pri has the link to “dependencies” of the project with  binary files of opencv2 VC14);
-3. Assemble the project.
+3. Build the project.
 
 Setup for Linux:
 ----------------------------------------------
 1. Clone the repository;
 2. Launch the console and run command “sudo apt-get install libopencv-dev” and “ sudo apt-get install qtmultimedia5-dev”;
-3. Assemble the project.
+3. Build the project.
 
 Compiled applications are located in folder “bin”
