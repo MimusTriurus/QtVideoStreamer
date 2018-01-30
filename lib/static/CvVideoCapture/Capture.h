@@ -11,7 +11,7 @@
  * @brief Предназначен для получения кадров в формате cv::Mat
  * из различных источников видео информации средствами cv::VideoCapture
  */
-class Capture : public QThread {
+class Capture : public QObject {
     Q_OBJECT
 public:
     explicit Capture( QObject *parent = nullptr );
@@ -34,20 +34,14 @@ public slots:
     bool open( const int deviceId = DEFAULT_CAMERA_ID );
 
     void close( );
-protected:
-    void run( );
 signals:
     /**
      * @brief сообщение об ошибке
      */
     void onError( const QString & );
 private:
-    int _deviceId{ DEFAULT_CAMERA_ID };
-    bool _work{ false };
     cv::Mat _frame;
-    int _frameHeight{ 240 };
-    int _frameWidth{ 320 };
-    int _fps{ 30 };
+    cv::VideoCapture _capture;
 };
 
 #endif // CAPTURE_H
