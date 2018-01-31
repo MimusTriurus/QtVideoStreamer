@@ -31,11 +31,17 @@ private:
     QTimer              _tmrFrameUpdate;
     VideoTransmitter    _transmitter;
 
-    QLineEdit           _cameraId{ "0" };
-    QLineEdit           _host{ "127.0.0.1" };
-    QLineEdit           _port{ "10000" };
+    QLineEdit           _cameraId    { "0" };
+    QLineEdit           _host        { "192.168.1.40" };
+    QLineEdit           _port        { "10000" };
     QTextEdit           _log;
     QCheckBox           _showFrameWin{ "Show frame window" };
+    QCheckBox           _toGrayscale { "Convert BGR2RGB" };
+    QCheckBox           _resize      { "Resize to 320x240" };
+    QCheckBox           _byLink      { "Transfer qbytearray by link" };
+    QLineEdit           _quality     { "80" };
+
+    QPushButton         _btnStart    { "Start" };
 
     void initInterface( );
 private slots:

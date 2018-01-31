@@ -20,12 +20,16 @@ public:
     void frameHeight( int value );
     void frameWidth( int value );
     void fps( int value );
+
+    bool isOpened( );
 public slots:
     /**
      * @brief чтение очередного кадра
      * @return кадр
      */
     cv::Mat read( );
+
+    bool retrieve( cv::Mat &mat );
     /**
      * @brief получение доступа к камере
      * @param deviceId идентификатор камеры

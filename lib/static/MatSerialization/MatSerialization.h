@@ -12,6 +12,7 @@ public:
     MatSerialization( ) = delete;
 
     static QByteArray serializeMat( const cv::Mat &mat, int quality = 80 );
+    static void serializeMat( const cv::Mat &mat, QByteArray &matData, int quality = 80 );
     static cv::Mat deserializeMat( const QByteArray &matData );
 };
 

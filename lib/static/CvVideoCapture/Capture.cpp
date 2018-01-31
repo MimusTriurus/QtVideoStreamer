@@ -3,7 +3,8 @@
 
 Capture::Capture( QObject *parent ) :
     QObject( parent ) {
-
+    _capture.set( CV_CAP_PROP_FRAME_HEIGHT, 480 );
+    _capture.set( CV_CAP_PROP_FRAME_WIDTH, 640 );
 }
 
 Capture::~Capture( ) {
@@ -23,8 +24,15 @@ void Capture::fps( int value ) {
     _capture.set( CV_CAP_PROP_FPS, value );
 }
 
+bool Capture::isOpened( ) {
+    return _capture.isOpened( );
+}
+
 bool Capture::open( const int deviceId ) {
-    return _capture.open( deviceId );
+    _capture.open( deviceId );
+    qDebug( ) << _capture.get( CV_CAP_PROP_FRAME_HEIGHT );
+    qDebug( ) << _capture.get( CV_CAP_PROP_FRAME_WIDTH );
+    return _capture.isOpened( );
 }
 
 void Capture::close( ) {
@@ -34,4 +42,8 @@ void Capture::close( ) {
 cv::Mat Capture::read( ) {
     _capture >> _frame;
     return _frame;
+}
+
+bool Capture::retrieve( cv::Mat &mat ) {
+    return _capture.retrieve( mat );
 }
