@@ -4,8 +4,6 @@
 #include <QDebug>
 #include <MatSerialization.h>
 
-#include <opencv2/imgproc.hpp>
-
 MainWindow::MainWindow( QWidget *parent ) :
     QMainWindow( parent ),
     ui( new Ui::MainWindow )
