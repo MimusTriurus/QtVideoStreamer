@@ -23,13 +23,7 @@ public:
 
     bool isOpened( );
 public slots:
-    /**
-     * @brief чтение очередного кадра
-     * @return кадр
-     */
-    cv::Mat read( );
-
-    bool retrieve( cv::Mat &mat );
+    void read( cv::Mat &mat );
     /**
      * @brief получение доступа к камере
      * @param deviceId идентификатор камеры

@@ -46,7 +46,7 @@ void MainWindow::initInterface( ) {
     mainLayout->addWidget( lbl );
     mainLayout->addWidget( &_port );
 
-    lbl = new QLabel( "Set quality( 20 - 100 ):", this );
+    lbl = new QLabel( "Set quality( 20 - 90 ):", this );
     mainLayout->addWidget( lbl );
     mainLayout->addWidget( &_quality );
 
@@ -58,12 +58,15 @@ void MainWindow::initInterface( ) {
 
 void MainWindow::onBtnStart( ) {
     if ( !_capture.isOpened( ) ) {
-        bool camOpened = _capture.open( _cameraId.text( ).toInt( ) );
-        _transmitter.host( _host.text( ) );
-        _transmitter.port( _port.text( ).toInt( ) );
-        if ( camOpened )
+        bool opened = _capture.open( _cameraId.text( ).toInt( ) );
+        if ( opened ) {
+            _transmitter.host( _host.text( ) );
+            _transmitter.port( _port.text( ).toInt( ) );
             _tmrFrameUpdate.start( 5 );
-        _btnStart.setText( "Stop" );
+            _btnStart.setText( "Stop" );
+        }
+        else
+            onCrash( "camera:" + _cameraId.text( ) + " is not opened" );
     }
     else {
         _btnStart.setText( "Start" );
@@ -74,7 +77,12 @@ void MainWindow::onBtnStart( ) {
 
 void MainWindow::onUpdateFrame( ) {
     cv::Mat frame;
-    _capture.retrieve( frame );
+    _capture.read( frame );
+    if ( frame.empty( ) ) {
+        onCrash( "frame is empty" );
+        return;
+    }
+
     if ( _toGrayscale.isChecked( ) )
         cv::cvtColor( frame, frame, cv::COLOR_BGR2GRAY );
     if ( _resize.isChecked( ) ) {
@@ -87,15 +95,17 @@ void MainWindow::onUpdateFrame( ) {
             cv::imshow( "Transmitter", frame );
         }
         int quality{ _quality.text( ).toInt( ) };
-        QByteArray outputBytes;
+
         if ( _byLink.isChecked( ) ) {
-            MatSerialization::serializeMat( frame, outputBytes, quality );
+            std::vector<uchar> outputBytesNew;
+            MatSerialization::serializeMat( frame, outputBytesNew, quality );
+            _transmitter.sendFrameData( outputBytesNew );
         }
         else {
+            QByteArray outputBytes;
             outputBytes = MatSerialization::serializeMat( frame, quality );
+            _transmitter.sendFrameData( outputBytes );
         }
-        //qDebug( ) << "count:" << outputBytes.count( );
-        _transmitter.sendFrameData( outputBytes );
     }
 }
 

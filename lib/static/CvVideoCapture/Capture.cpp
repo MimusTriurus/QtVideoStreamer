@@ -39,11 +39,6 @@ void Capture::close( ) {
     _capture.release( );
 }
 
-cv::Mat Capture::read( ) {
-    _capture >> _frame;
-    return _frame;
-}
-
-bool Capture::retrieve( cv::Mat &mat ) {
-    return _capture.retrieve( mat );
+void Capture::read( cv::Mat &mat ) {
+    _capture >> mat;
 }

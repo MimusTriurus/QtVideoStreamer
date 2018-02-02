@@ -27,6 +27,8 @@ public:
 private:
     Ui::MainWindow      *ui;
 
+    bool                _cameraIsOpen{ false };
+
     Capture             _capture;
     QTimer              _tmrFrameUpdate;
     VideoTransmitter    _transmitter;

@@ -17,6 +17,7 @@ signals:
     void onError( const QString & );
 public slots:
     void sendFrameData( const QByteArray &imgData );
+    void sendFrameData( const std::vector<uchar> &imgData );
 private:
     const int       PACKET_SIZE{ 4096 };
     QUdpSocket      _socket;

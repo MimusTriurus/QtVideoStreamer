@@ -32,7 +32,8 @@ MainWindow::~MainWindow( ) {
 }
 
 void MainWindow::onNewCvFrame( ) {
-    cv::Mat frame{ _capture.read( ) };
+    cv::Mat frame;
+    _capture.read( frame );
     if ( !frame.empty( ) && _showCameraWin.isChecked( ) ) {
         //cv::resize( frame, frame, cv::Size( 640, 360 ), 0, 0, cv::INTER_CUBIC );
         imshow( "win", frame );
