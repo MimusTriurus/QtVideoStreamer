@@ -8,4 +8,5 @@ SUBDIRS +=              \
     QVideoCapture       \
     CvVideoCapture      \
     VideoTransmitter    \
-    VideoReceiver
+    VideoReceiver \
+    FpsChecker

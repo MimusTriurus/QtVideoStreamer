@@ -3,7 +3,6 @@
 
 #include <QtCore>
 #include <QUdpSocket>
-#include <QImage>
 
 /**
  * @brief Приемник видеопотока
