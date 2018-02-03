@@ -41,20 +41,8 @@ HEADERS += \
 FORMS += \
         MainWindow.ui
 
-unix {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += opencv
-}
+include(../../config.pri)
 
-win32 {
-    include(../../config.pri)
-    LIBS += $$OPENCV_LIBS_PATH $$OPENCV_LIB_CORE \
-    $$OPENCV_LIB_IMGPROC \
-    $$OPENCV_LIB_HIGHGUI
-
-    INCLUDEPATH += $$OPENCV_INCLUDEPATH
-    DEPENDPATH += $$OPENCV_DEPENDPATH
-}
 #################################### VideoReceiver #############################
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/VideoReceiver/release/ -lVideoReceiver
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/VideoReceiver/debug/ -lVideoReceiver

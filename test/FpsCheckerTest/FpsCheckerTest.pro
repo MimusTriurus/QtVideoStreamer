@@ -8,26 +8,9 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp #\
-    #FpsChecker.cpp
+SOURCES += main.cpp
 
-unix {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += opencv
-}
-
-win32 {
-    include(../../config.pri)
-    LIBS += $$OPENCV_LIBS_PATH $$OPENCV_LIB_CORE \
-    $$OPENCV_LIB_IMGPROC \
-    $$OPENCV_LIB_HIGHGUI
-
-    INCLUDEPATH += $$OPENCV_INCLUDEPATH
-    DEPENDPATH += $$OPENCV_DEPENDPATH
-}
-
-#HEADERS += \
-    #FpsChecker.h
+include(../../config.pri)
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/FpsChecker/release/ -lFpsChecker
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/FpsChecker/debug/ -lFpsChecker

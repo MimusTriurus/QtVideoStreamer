@@ -20,3 +20,5 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+include(../../../config.pri)
