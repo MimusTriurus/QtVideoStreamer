@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <Capture.h>
+#include <FpsChecker.h>
 
 namespace Ui {
 class MainWindow;
@@ -18,15 +19,16 @@ public:
     ~MainWindow( );
 private:
     Ui::MainWindow *ui;
-    Capture _capture;
-    QTimer _tmrFrameUpdate;
-    bool _start{ false };
-    const int CAMERA_ID{ 1 };
-    const int UPDATE_FRAME_INTERVAL{ 5 };
 
-    QLineEdit _camIndex{ "1" };
-    QCheckBox _showCameraWin{ "Show Camera Win" };
-    QPushButton _btnStart{ "Start" };
+    Capture     _capture;
+    FpsChecker  _fpsChecker;
+    QTimer      _tmrFrameUpdate;
+    bool        _start{ false };
+
+    QLineEdit   _camIndex       { "0" };
+    QLineEdit   _camFps         { "30" };
+    QCheckBox   _showCameraWin  { "Show Camera Win" };
+    QPushButton _btnStart       { "Start" };
     void initInterface( );
 private slots:
     void onNewCvFrame( );

@@ -19,9 +19,15 @@ public:
 
     void frameHeight( int value );
     void frameWidth( int value );
-    void fps( int value );
 
     bool isOpened( );
+    /**
+     * @brief получаем интервал опроса камеры
+     * на получение нового кадра исходя из требуемого максимального fps
+     * @param fps масксимальный fps камер( не факт что камера его выдаст )
+     * @return интервал таймера опроса камеры на чтение кадра
+     */
+    static int getIntervalByMaxFps( const int fps );
 public slots:
     void read( cv::Mat &mat );
     /**
@@ -38,7 +44,6 @@ signals:
      */
     void onError( const QString & );
 private:
-    cv::Mat _frame;
     cv::VideoCapture _capture;
 };
 

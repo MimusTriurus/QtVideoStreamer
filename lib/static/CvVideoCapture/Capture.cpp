@@ -3,8 +3,7 @@
 
 Capture::Capture( QObject *parent ) :
     QObject( parent ) {
-    _capture.set( CV_CAP_PROP_FRAME_HEIGHT, 480 );
-    _capture.set( CV_CAP_PROP_FRAME_WIDTH, 640 );
+
 }
 
 Capture::~Capture( ) {
@@ -20,12 +19,12 @@ void Capture::frameWidth( int value ) {
     _capture.set( CV_CAP_PROP_FRAME_WIDTH, value );
 }
 
-void Capture::fps( int value ) {
-    _capture.set( CV_CAP_PROP_FPS, value );
-}
-
 bool Capture::isOpened( ) {
     return _capture.isOpened( );
+}
+
+int Capture::getIntervalByMaxFps( const int fps ) {
+    return cvRound( 1000 / fps );
 }
 
 bool Capture::open( const int deviceId ) {
