@@ -4,7 +4,4 @@ SUBDIRS += \
     VideoCaptureTest    \
     CvTransmitterTest   \
     CvReceiverTest      \
-    QCameraTest         \
-    QImgReceiverTest    \
-    QImgTransmitterTest \
     FpsCheckerTest

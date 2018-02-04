@@ -1,24 +1,21 @@
 # QtVideoStreamer
 Simple Qt video streamer
 ____________________________________________________________________________________________________________
-ImageSerialization  - static library of serialization/deserialization QImage
-
 MatSerialization    - static library of serialization/deserialization cv::Mat
 
 CvVideoCapture      - static library of image capture from camera by means of OpenCV
-
-QVideoCapture       - static library of image capture from camera by means of Qt (QCamera)
 
 VideoTransmitter    - static library of image transmitting from camera to application-receiver over network 
 
 VideoReceiver       - static library of image receiving over network from application-transmitter 
 
+FpsChecker			- static library of check fps
+
 CvTransmitterTest   - test application – image transmitter from camera by means of OpenCV
 
 CvReceiverTest      - test application – image receiver from camera by means of OpenCV
 
-QImgTransmitterTest - test application – image transmitter from camera by means of Qt (QCamera)
-QImgReceiverTest    - test application – image receiver from camera by means of Qt (QCamera)
+VideoCaptureTest	- test CvVideoCapture
 _____________________________________________________________________________________________________________
 
 System requirements:
@@ -38,7 +35,23 @@ Setup for Windows:
 Setup for Linux:
 ----------------------------------------------
 1. Clone the repository;
-2. Launch the console and run command “sudo apt-get install libopencv-dev” and “ sudo apt-get install qtmultimedia5-dev”;
+2. Launch the console and run command “sudo apt-get install libopencv-dev”;
 3. Build the project.
 
 Compiled applications are located in folder “bin”
+
+Remarks:
+----------------------------------------------
+OpenCV relies on the V4L2 (Video for Linux) module, so try adding the following line at the bottom of the file /etc/modules and rebooting your Raspberry Pi.
+
+bcm2835-v4l2
+
+Mine now looks like this in toto:
+
+# /etc/modules: kernel modules to load at boot time.
+#
+# This file contains the names of kernel modules that should be loaded
+# at boot time, one per line. Lines beginning with "#" are ignored.
+
+bcm2835-v4l2
+This ensures that the Broadcom Video For Linux 2 (v4l2) driver is loaded at all subsequent reboots.
