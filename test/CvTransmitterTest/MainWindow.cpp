@@ -60,7 +60,7 @@ void MainWindow::onBtnStart( ) {
         if ( opened ) {
             _transmitter.host( _host.text( ) );
             _transmitter.port( _port.text( ).toInt( ) );
-            _tmrFrameUpdate.start( 5 );
+            _tmrFrameUpdate.start( Capture::getIntervalByMaxFps( 30 ) );
             _btnStart.setText( "Stop" );
         }
         else
