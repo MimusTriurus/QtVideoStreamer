@@ -20,4 +20,4 @@ unix {
     INSTALLS += target
 }
 
-include(../../config.pri)
+include(../../../config.pri)

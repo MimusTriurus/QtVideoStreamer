@@ -12,8 +12,8 @@ MainWindow::MainWindow( QWidget *parent ) :
 {
     ui->setupUi( this );
     _showCameraWin.setChecked( true );
-    _capture.frameHeight( 240 );
-    _capture.frameWidth( 320 );
+    _capture.frameHeight( 1080 );
+    _capture.frameWidth( 1920 );
     connect( &_tmrFrameUpdate, SIGNAL( timeout( ) ), this, SLOT( onNewCvFrame( ) ) );
     initInterface( );
 }
