@@ -46,12 +46,4 @@ OpenCV relies on the V4L2 (Video for Linux) module, so try adding the following 
 
 bcm2835-v4l2
 
-Mine now looks like this in toto:
-
-# /etc/modules: kernel modules to load at boot time.
-#
-# This file contains the names of kernel modules that should be loaded
-# at boot time, one per line. Lines beginning with "#" are ignored.
-
-bcm2835-v4l2
 This ensures that the Broadcom Video For Linux 2 (v4l2) driver is loaded at all subsequent reboots.
