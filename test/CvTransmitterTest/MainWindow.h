@@ -21,6 +21,11 @@ class MainWindow;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
+
+    bool    _showFrameWindow;
+    bool    _grayScale;
+    bool    _link;
+    int     _qual;
 public:
     explicit MainWindow( QWidget *parent = nullptr );
     ~MainWindow( );

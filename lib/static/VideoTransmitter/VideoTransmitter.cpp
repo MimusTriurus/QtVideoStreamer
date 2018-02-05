@@ -26,8 +26,11 @@ void VideoTransmitter::sendFrameData( const QByteArray &imgData ) {
     sendPacketsCount( totalPack );
     int i{ 0 };
     while ( i < totalPack ) {
-        QByteArray bytes{ imgData.mid( i * PACKET_SIZE, PACKET_SIZE ) };
-        _socket.writeDatagram( bytes , _host, _port );
+//        QByteArray bytes{ imgData.mid( i * PACKET_SIZE, PACKET_SIZE ) };
+//        _socket.writeDatagram( bytes , _host, _port );
+
+        _socket.writeDatagram( imgData.mid( i * PACKET_SIZE, PACKET_SIZE ),
+                               _host, _port );
         i++;
     }
 }
@@ -36,6 +39,7 @@ void VideoTransmitter::sendFrameData( const std::vector<uchar> &imgData ) {
     int imgDataSize{ static_cast<int>( imgData.size( ) ) };
     int totalPack = 1 + ( imgDataSize - 1 ) / PACKET_SIZE;
     sendPacketsCount( totalPack );
+
     _socket.writeDatagram( reinterpret_cast<const char*>( imgData.data( ) ),
                            static_cast<int>( imgDataSize ),
                            _host,

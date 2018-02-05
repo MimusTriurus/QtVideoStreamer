@@ -24,7 +24,7 @@ bool Capture::isOpened( ) {
 }
 
 int Capture::getIntervalByMaxFps( const int fps ) {
-    return cvRound( 1000 / fps );
+    return cvRound( 1000.0 / fps );
 }
 
 bool Capture::open( const int deviceId ) {
