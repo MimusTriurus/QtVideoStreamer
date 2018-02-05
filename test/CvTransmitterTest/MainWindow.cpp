@@ -64,10 +64,11 @@ void MainWindow::onBtnStart( ) {
             _tmrFrameUpdate.start( Capture::getIntervalByMaxFps( 30 ) );
             _btnStart.setText( "Stop" );
 
-            _showFrameWindow = _showFrameWin.isChecked ();
-            _grayScale  = _toGrayscale.isChecked ();
-            _link       = _byLink.isChecked ();
-            _qual       = _quality.text ().toInt ();
+            _showFrameWindow = _showFrameWin.isChecked( );
+            _grayScale       = _toGrayscale.isChecked( );
+            _link            = _byLink.isChecked( );
+            _resizeFrame     = _resize.isChecked( );
+            _qual            = _quality.text( ).toInt( );
         }
         else
             onCrash( "camera:" + _cameraId.text( ) + " is not opened" );
@@ -80,12 +81,6 @@ void MainWindow::onBtnStart( ) {
 }
 
 void MainWindow::onUpdateFrame( ) {
-
-    static QTime time;
-    static int  i = 30;
-
-
-
     cv::Mat frame;
     _capture.read( frame );
     if ( frame.empty( ) ) {
@@ -93,14 +88,12 @@ void MainWindow::onUpdateFrame( ) {
         return;
     }
 
-    time = QTime::currentTime ();
-
     if ( _grayScale )
         cv::cvtColor( frame, frame, cv::COLOR_BGR2GRAY );
 
-    //    if ( _resize.isChecked( ) ) {
-    //        cv::resize( frame, frame, cv::Size( 320, 240 ) );
-    //    }
+    if ( _resizeFrame ) {
+        cv::resize( frame, frame, cv::Size( 320, 240 ) );
+    }
 
     if ( frame.data ) {
 
@@ -109,7 +102,7 @@ void MainWindow::onUpdateFrame( ) {
             cv::imshow( "Transmitter", frame );
         }
 
-        int quality = _qual; //{ _quality.text( ).toInt( ) };
+        int quality = _qual;
 
         if ( _link ) {
             std::vector<uchar> outputBytesNew;
@@ -117,21 +110,8 @@ void MainWindow::onUpdateFrame( ) {
             _transmitter.sendFrameData( outputBytesNew );
         }
         else {
-            //            QByteArray outputBytes;
-            //            outputBytes = MatSerialization::serializeMat( frame, quality );
-            //            _transmitter.sendFrameData( outputBytes );
-
             _transmitter.sendFrameData ( MatSerialization::serializeMat( frame, quality ) );
         }
-    }
-
-
-
-    --i;
-    if ( i <= 0 ) {
-
-        std::cout << "frame time: " << time.msecsTo ( QTime::currentTime () ) / 10.0 << std::endl;
-        i = 10;
     }
 }
 

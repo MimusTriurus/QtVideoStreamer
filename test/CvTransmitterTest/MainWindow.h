@@ -21,18 +21,18 @@ class MainWindow;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
-
-    bool    _showFrameWindow;
-    bool    _grayScale;
-    bool    _link;
-    int     _qual;
 public:
     explicit MainWindow( QWidget *parent = nullptr );
     ~MainWindow( );
 private:
     Ui::MainWindow      *ui;
 
-    bool                _cameraIsOpen{ false };
+    bool                _cameraIsOpen   { false };
+    bool                _showFrameWindow{ false };
+    bool                _grayScale      { false };
+    bool                _link           { false };
+    bool                _resizeFrame    { false };
+    int                 _qual           { 50 };
 
     Capture             _capture;
     QTimer              _tmrFrameUpdate;
