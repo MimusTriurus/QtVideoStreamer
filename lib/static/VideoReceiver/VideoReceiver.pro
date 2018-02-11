@@ -16,7 +16,4 @@ CONFIG += c++11
 SOURCES += VideoReceiver.cpp
 
 HEADERS += VideoReceiver.h
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+

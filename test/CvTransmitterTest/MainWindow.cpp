@@ -16,8 +16,6 @@ MainWindow::MainWindow( QWidget *parent ) :
              this, SLOT( onUpdateFrame( ) ) );
     connect( &_capture, SIGNAL( onError( QString ) ),
              this, SLOT( onCrash( QString ) ) );
-    //connect( &_transmitter, SIGNAL( onError( QString ) ),
-    //this, SLOT( onCrash( QString ) ) );
 }
 
 MainWindow::~MainWindow( ) {
@@ -31,7 +29,6 @@ void MainWindow::initInterface( ) {
     mainLayout->addWidget( &_showFrameWin );
     mainLayout->addWidget( &_toGrayscale );
     mainLayout->addWidget( &_resize );
-    mainLayout->addWidget( &_byLink );
 
     auto lbl = new QLabel( "Set camera:", this );
     mainLayout->addWidget( lbl );
@@ -66,7 +63,6 @@ void MainWindow::onBtnStart( ) {
 
             _showFrameWindow = _showFrameWin.isChecked( );
             _grayScale       = _toGrayscale.isChecked( );
-            _link            = _byLink.isChecked( );
             _resizeFrame     = _resize.isChecked( );
             _qual            = _quality.text( ).toInt( );
         }
@@ -81,6 +77,9 @@ void MainWindow::onBtnStart( ) {
 }
 
 void MainWindow::onUpdateFrame( ) {
+    _fpsChecker.stop( );
+    _fpsChecker.start( );
+
     cv::Mat frame;
     _capture.read( frame );
     if ( frame.empty( ) ) {
@@ -96,22 +95,24 @@ void MainWindow::onUpdateFrame( ) {
     }
 
     if ( frame.data ) {
-
         if ( _showFrameWindow ) {
             cv::namedWindow( "Transmitter", cv::WINDOW_AUTOSIZE );
+
+            cv::putText( frame,
+                         cv::format( "FPS=%d",
+                         _fpsChecker.fps( ) ),
+                         cv::Point( 30, 30 ),
+                         cv::FONT_HERSHEY_SIMPLEX,
+                         0.8,
+                         cv::Scalar( 255, 0, 0 ) );
+
             cv::imshow( "Transmitter", frame );
         }
 
         int quality = _qual;
-
-        if ( _link ) {
-            std::vector<uchar> outputBytesNew;
-            MatSerialization::serializeMat( frame, outputBytesNew, quality );
-            _transmitter.sendFrameData( outputBytesNew );
-        }
-        else {
-            _transmitter.sendFrameData ( MatSerialization::serializeMat( frame, quality ) );
-        }
+        std::vector<uchar> outputBytesNew( frame.rows * frame.cols);
+        MatSerialization::serializeMat( frame, outputBytesNew, quality );
+        _transmitter.sendFrameData( outputBytesNew );
     }
 }
 

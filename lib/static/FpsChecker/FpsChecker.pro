@@ -15,9 +15,4 @@ SOURCES += FpsChecker.cpp
 
 HEADERS += FpsChecker.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
 include(../../../config.pri)

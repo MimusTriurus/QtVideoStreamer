@@ -12,8 +12,9 @@
 
 #include <Capture.h>
 #include <VideoTransmitter.h>
+#include <FpsChecker.h>
 
-#include "opencv2/opencv.hpp"
+#include <opencv2/opencv.hpp>
 
 namespace Ui {
 class MainWindow;
@@ -39,17 +40,17 @@ private:
     VideoTransmitter    _transmitter;
 
     QLineEdit           _cameraId    { "0" };
-    QLineEdit           _host        { "192.168.1.40" };
+    QLineEdit           _host        { "192.168.1.41" };
     QLineEdit           _port        { "10000" };
     QTextEdit           _log;
     QCheckBox           _showFrameWin{ "Show frame window" };
     QCheckBox           _toGrayscale { "Convert BGR2RGB" };
     QCheckBox           _resize      { "Resize to 320x240" };
-    QCheckBox           _byLink      { "Transfer qbytearray by link" };
-    QLineEdit           _quality     { "80" };
+    QLineEdit           _quality     { "50" };
 
     QPushButton         _btnStart    { "Start" };
 
+    FpsChecker          _fpsChecker;
     void initInterface( );
 private slots:
     void onBtnStart( );

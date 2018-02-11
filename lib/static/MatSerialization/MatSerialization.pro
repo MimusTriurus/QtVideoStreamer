@@ -14,9 +14,5 @@ CONFIG += c++11
 SOURCES += MatSerialization.cpp
 
 HEADERS += MatSerialization.h
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
 
 include(../../../config.pri)

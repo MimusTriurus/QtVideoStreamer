@@ -10,7 +10,7 @@ win32 {
     OPENCV_DEPENDPATH  = $$PWD/dependencies/include
 
     equals(QT_ARCH, i386) {
-        #message("32-bit")
+        message("Win 32-bit unsupported yet")
         OPENCV_LIBS_PATH   = -L$$PWD/dependencies/lib/x86/
     }
 
@@ -18,14 +18,7 @@ win32 {
         #message("64-bit")
         OPENCV_LIBS_PATH   = -L$$PWD/dependencies/lib/x64/
     }
-
-    OPENCV_LIB_CORE    = -lopencv_core2413
-    OPENCV_LIB_IMGPROC = -lopencv_imgproc2413
-    OPENCV_LIB_HIGHGUI = -lopencv_highgui2413
-
-    LIBS += $$OPENCV_LIBS_PATH $$OPENCV_LIB_CORE \
-    $$OPENCV_LIB_IMGPROC \
-    $$OPENCV_LIB_HIGHGUI
+    LIBS += $$OPENCV_LIBS_PATH -lopencv_world331
 
     INCLUDEPATH += $$OPENCV_INCLUDEPATH
     DEPENDPATH += $$OPENCV_DEPENDPATH

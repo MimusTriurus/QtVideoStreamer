@@ -6,10 +6,10 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-
+#include <FpsChecker.h>
 #include <VideoReceiver.h>
 
-#include "opencv2/opencv.hpp"
+#include <opencv2/opencv.hpp>
 
 namespace Ui {
 class MainWindow;
@@ -25,9 +25,13 @@ private:
     Ui::MainWindow  *ui;
     QLineEdit       _port{ "10000" };
     VideoReciever   _receiver;
+    bool            _isListen{ false };
+    QPushButton     _btnListen{ "Start" };
+    FpsChecker      _fpsChecker;
     void initInterface( );
 private slots:
     void onReceiveData( const QByteArray &data );
+    void onListenClick( );
 };
 
 #endif // MAINWINDOW_H

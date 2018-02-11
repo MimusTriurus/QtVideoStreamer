@@ -118,13 +118,6 @@ public:
     }
 
     /**
-     * Dummy implementation for other algorithms of addable indexes after that.
-     */
-    void addIndex(const Matrix<ElementType>& /*wholeData*/, const Matrix<ElementType>& /*additionalData*/)
-    {
-    }
-
-    /**
      * Builds the index
      */
     void buildIndex()
@@ -132,7 +125,12 @@ public:
         /* Construct the randomized trees. */
         for (int i = 0; i < trees_; i++) {
             /* Randomize the order of vectors to allow for unbiased sampling. */
+#ifndef OPENCV_FLANN_USE_STD_RAND
+            cv::randShuffle(vind_);
+#else
             std::random_shuffle(vind_.begin(), vind_.end());
+#endif
+
             tree_roots_[i] = divideTree(&vind_[0], int(size_) );
         }
     }

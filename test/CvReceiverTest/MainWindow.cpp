@@ -19,20 +19,40 @@ MainWindow::~MainWindow( ) {
 }
 
 void MainWindow::onReceiveData( const QByteArray &data ) {
+    _fpsChecker.stop( );
+    _fpsChecker.start( );
     cv::namedWindow( "Receiver", cv::WINDOW_AUTOSIZE );
     cv::Mat img{ MatSerialization::deserializeMat( data ) };
-    if ( !img.empty( ) )
+    if ( !img.empty( ) ) {
+        cv::putText( img,
+                     cv::format( "FPS=%d",
+                     _fpsChecker.fps( ) ),
+                     cv::Point( 30, 30 ),
+                     cv::FONT_HERSHEY_SIMPLEX,
+                     0.8,
+                     cv::Scalar( 255, 0, 0 ) );
         cv::imshow( "Receiver", img );
+    }
+
+}
+
+void MainWindow::onListenClick( ) {
+    if ( !_isListen ) {
+        this->_receiver.listen( this->_port.text( ).toInt( ) );
+        _btnListen.setText( "Stop" );
+    }
+    else {
+        _btnListen.setText( "Start" );
+        this->_receiver.stopListen( );
+    }
+    _isListen = !_isListen;
 }
 
 void MainWindow::initInterface( ) {
     this->centralWidget( )->setLayout( new QVBoxLayout( this->centralWidget( ) ) );
     this->centralWidget( )->layout( )->addWidget( new QLabel( "Set listening port" ) );
     this->centralWidget( )->layout( )->addWidget( &_port );
-    auto btnListen = new QPushButton( "Start to listen", this );
-    connect( btnListen, &QPushButton::clicked, [ this ]( ) {
-        this->_receiver.listen( this->_port.text( ).toInt( ) );
-    } );
-    this->centralWidget( )->layout( )->addWidget( btnListen );
+    connect( &_btnListen, &QPushButton::clicked, this, &MainWindow::onListenClick );
+    this->centralWidget( )->layout( )->addWidget( &_btnListen );
     this->centralWidget( )->layout( )->setAlignment( Qt::AlignTop );
 }

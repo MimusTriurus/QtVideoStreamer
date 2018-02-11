@@ -16,10 +16,6 @@ class Capture : public QObject {
 public:
     explicit Capture( QObject *parent = nullptr );
     ~Capture( );
-
-    void frameHeight( int value );
-    void frameWidth( int value );
-
     bool isOpened( );
     /**
      * @brief получаем интервал опроса камеры

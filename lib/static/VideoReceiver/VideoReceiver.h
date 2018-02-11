@@ -12,6 +12,7 @@ class VideoReciever : public QObject {
 public:
     explicit VideoReciever( QObject *parent = nullptr );
     void listen( const quint16 port );
+    void stopListen( );
 signals:
     void imgDataReceived( const QByteArray & );
 private:

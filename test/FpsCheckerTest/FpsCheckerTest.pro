@@ -10,6 +10,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp
 
+DESTDIR = ../../bin
+
 include(../../config.pri)
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib/static/FpsChecker/release/ -lFpsChecker

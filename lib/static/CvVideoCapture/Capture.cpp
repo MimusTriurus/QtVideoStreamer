@@ -3,7 +3,6 @@
 
 Capture::Capture( QObject *parent ) :
     QObject( parent ) {
-
 }
 
 Capture::~Capture( ) {
@@ -11,26 +10,18 @@ Capture::~Capture( ) {
         _capture.release( );
 }
 
-void Capture::frameHeight( int value ) {
-    _capture.set( CV_CAP_PROP_FRAME_HEIGHT, value );
-}
-
-void Capture::frameWidth( int value ) {
-    _capture.set( CV_CAP_PROP_FRAME_WIDTH, value );
-}
-
 bool Capture::isOpened( ) {
     return _capture.isOpened( );
 }
 
 int Capture::getIntervalByMaxFps( const int fps ) {
-    return cvRound( 1000.0 / fps );
+    return cvRound( 1000 / fps );
 }
 
 bool Capture::open( const int deviceId ) {
-    _capture.open( deviceId );
-    qDebug( ) << _capture.get( CV_CAP_PROP_FRAME_HEIGHT );
-    qDebug( ) << _capture.get( CV_CAP_PROP_FRAME_WIDTH );
+    bool success{ _capture.open( deviceId ) };
+    if ( !success )
+        emit this->onError( "error on open camera " + QString::number( deviceId ) );
     return _capture.isOpened( );
 }
 

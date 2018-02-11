@@ -14,7 +14,3 @@ CONFIG += c++11
 SOURCES += VideoTransmitter.cpp
 
 HEADERS += VideoTransmitter.h
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
