@@ -18,6 +18,17 @@ public:
     ~Capture( );
     bool isOpened( );
     /**
+     * @brief устанавливаем разрешение камеры
+     * @param width
+     * @param height
+     */
+    void resolution( double width, double height );
+    /**
+     * @brief устанавливаем fps для камеры
+     * @param value
+     */
+    void fps( double value );
+    /**
      * @brief получаем интервал опроса камеры
      * на получение нового кадра исходя из требуемого максимального fps
      * @param fps масксимальный fps камер( не факт что камера его выдаст )

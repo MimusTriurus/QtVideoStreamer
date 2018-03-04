@@ -61,6 +61,8 @@ void MainWindow::onBtnStartStop( ) {
         _tmrFrameUpdate.setInterval( interval );
         _btnStart.setText( "Stop" );
         _capture.open( num );
+        _capture.resolution( 1280, 720 );
+        _capture.fps( 30 );
         _tmrFrameUpdate.start( );
     }
     else {

@@ -56,6 +56,9 @@ void MainWindow::onBtnStart( ) {
     if ( !_capture.isOpened( ) ) {
         bool opened = _capture.open( _cameraId.text( ).toInt( ) );
         if ( opened ) {
+            //960*576
+            _capture.resolution( 640, 480 );
+            //_capture.fps( 60 );
             _transmitter.host( _host.text( ) );
             _transmitter.port( _port.text( ).toInt( ) );
             _tmrFrameUpdate.start( Capture::getIntervalByMaxFps( 30 ) );
