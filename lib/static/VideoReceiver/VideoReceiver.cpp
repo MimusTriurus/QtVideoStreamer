@@ -14,7 +14,6 @@ void VideoReciever::stopListen( ) {
 }
 
 void VideoReciever::onReceiveData( ) {
-    qDebug( ) << "receive";
     while ( _server.hasPendingDatagrams( ) ) {
         QByteArray datagram;
         datagram.resize( _server.pendingDatagramSize( ) );
@@ -24,7 +23,6 @@ void VideoReciever::onReceiveData( ) {
         if ( msgSize == sizeof( int ) ) {
             QDataStream stream( datagram );
             stream >> _packetCount;
-            qDebug( ) << _packetCount;
             if ( _imgBytes.count( ) != 0 ) {
                 emit imgDataReceived( _imgBytes );
             }

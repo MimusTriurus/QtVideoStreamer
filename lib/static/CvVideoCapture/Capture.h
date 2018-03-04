@@ -16,18 +16,33 @@ class Capture : public QObject {
 public:
     explicit Capture( QObject *parent = nullptr );
     ~Capture( );
-    bool isOpened( );
+    bool isOpened( ) const;
     /**
-     * @brief устанавливаем разрешение камеры
+     * @brief сеттер разрешения камеры
      * @param width
      * @param height
      */
     void resolution( double width, double height );
     /**
-     * @brief устанавливаем fps для камеры
-     * @param value
+     * @brief геттер ширины кадра
+     * @return ширина кадра
+     */
+    double width( ) const;
+    /**
+     * @brief геттер высоты кадра
+     * @return высота кадра
+     */
+    double height( ) const ;
+    /**
+     * @brief сеттер fps для камеры
+     * @param fps камеры
      */
     void fps( double value );
+    /**
+     * @brief геттер fps для камеры
+     * @return fps камеры
+     */
+    double fps( ) const;
     /**
      * @brief получаем интервал опроса камеры
      * на получение нового кадра исходя из требуемого максимального fps
@@ -35,6 +50,8 @@ public:
      * @return интервал таймера опроса камеры на чтение кадра
      */
     static int getIntervalByMaxFps( const int fps );
+
+    static void printOpenCvBuildInfo( );
 public slots:
     void read( cv::Mat &mat );
     /**

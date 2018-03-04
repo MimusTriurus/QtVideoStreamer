@@ -25,7 +25,7 @@ MainWindow::~MainWindow( ) {
 void MainWindow::initInterface( ) {
     auto mainLayout = new QVBoxLayout( this->centralWidget( ) );
     this->centralWidget( )->setLayout( mainLayout );
-    _showFrameWin.setChecked( true );
+    _showFrameWin.setChecked( false );
     mainLayout->addWidget( &_showFrameWin );
     mainLayout->addWidget( &_toGrayscale );
     mainLayout->addWidget( &_resize );
@@ -46,6 +46,15 @@ void MainWindow::initInterface( ) {
     mainLayout->addWidget( lbl );
     mainLayout->addWidget( &_quality );
 
+    lbl = new QLabel( "Set camera resolution( width x height ):", this );
+    mainLayout->addWidget( lbl );
+    mainLayout->addWidget( &_width );
+    mainLayout->addWidget( &_height );
+
+    lbl = new QLabel( "Set camera FPS:", this );
+    mainLayout->addWidget( lbl );
+    mainLayout->addWidget( &_fps );
+
     connect( &_btnStart, SIGNAL( clicked( ) ), this, SLOT( onBtnStart( ) ) );
     mainLayout->addWidget( &_btnStart );
 
@@ -56,12 +65,11 @@ void MainWindow::onBtnStart( ) {
     if ( !_capture.isOpened( ) ) {
         bool opened = _capture.open( _cameraId.text( ).toInt( ) );
         if ( opened ) {
-            //960*576
-            _capture.resolution( 640, 480 );
-            //_capture.fps( 60 );
+            _capture.resolution( _width.text( ).toInt( ), _height.text( ).toInt( ) );
+            _capture.fps( _fps.text( ).toInt( ) );
             _transmitter.host( _host.text( ) );
             _transmitter.port( _port.text( ).toInt( ) );
-            _tmrFrameUpdate.start( Capture::getIntervalByMaxFps( 30 ) );
+            _tmrFrameUpdate.start( Capture::getIntervalByMaxFps( _capture.fps( ) ) );
             _btnStart.setText( "Stop" );
 
             _showFrameWindow = _showFrameWin.isChecked( );

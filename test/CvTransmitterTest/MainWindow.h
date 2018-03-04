@@ -40,13 +40,18 @@ private:
     VideoTransmitter    _transmitter;
 
     QLineEdit           _cameraId    { "0" };
-    QLineEdit           _host        { "192.168.1.41" };
+    QLineEdit           _host        { "192.168.1.51" };
     QLineEdit           _port        { "10000" };
     QTextEdit           _log;
     QCheckBox           _showFrameWin{ "Show frame window" };
     QCheckBox           _toGrayscale { "Convert BGR2RGB" };
     QCheckBox           _resize      { "Resize to 320x240" };
     QLineEdit           _quality     { "50" };
+
+    QLineEdit           _width       { "640" };
+    QLineEdit           _height      { "480" };
+
+    QLineEdit           _fps         { "30" };
 
     QPushButton         _btnStart    { "Start" };
 
