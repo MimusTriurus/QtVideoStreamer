@@ -1,7 +1,10 @@
 #include "VideoReceiver.h"
 #include <QDebug>
 
-VideoReciever::VideoReciever( QObject *parent ) : QObject( parent ) {
+VideoReciever::VideoReciever( QObject *parent ) :
+    QObject( parent ),
+    _imgSize{ -1 }
+{
     connect( &_server, &QUdpSocket::readyRead, this, &VideoReciever::onReceiveData );
 }
 
@@ -21,12 +24,14 @@ void VideoReciever::onReceiveData( ) {
         _server.readDatagram( datagram.data( ), datagram.size( ), &address );
         int msgSize{ datagram.size( ) };
         if ( msgSize == sizeof( int ) ) {
-            QDataStream stream( datagram );
-            stream >> _packetCount;
-            if ( _imgBytes.count( ) != 0 ) {
+            if ( _imgBytes.count( ) == _imgSize ) {
                 emit imgDataReceived( _imgBytes );
             }
+            else
+                qDebug( ) << "crash on receive img data" << _imgBytes.count( ) << "!=" << _imgSize;
             _imgBytes.clear( );
+            QDataStream stream( datagram );
+            stream >> _imgSize;
             return;
         }
         _imgBytes.append( datagram );

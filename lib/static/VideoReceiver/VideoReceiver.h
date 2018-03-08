@@ -17,7 +17,7 @@ signals:
     void imgDataReceived( const QByteArray & );
 private:
     QUdpSocket  _server;
-    int         _packetCount;
+    int         _imgSize;
     QByteArray  _imgBytes;
 private slots:
     void onReceiveData( );

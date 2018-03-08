@@ -13,17 +13,18 @@ public:
     void setQuality( const int quality );
     void host( const QString &host );
     void port( const quint16 port );
+    void packetSize( int size );
 signals:
     void onError( const QString & );
 public slots:
     void sendFrameData( const std::vector<uchar> &imgData );
 private:
-    const int       PACKET_SIZE{ 4096 };
+    int             _packetSize { 8192 };
+    int             _quality    { 55 };
     QUdpSocket      _socket;
-    int             _quality{ 55 };
     QHostAddress    _host;
     quint16         _port;
-    void sendPacketsCount( const int count );
+    void sendImgSize( const int count );
 };
 
 #endif // VIDEOTRANSMITTER_H
