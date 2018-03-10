@@ -3,24 +3,29 @@
 
 #include <QtCore>
 #include <QUdpSocket>
+#include <QThread>
 
 /**
  * @brief Приемник видеопотока
  */
-class VideoReciever : public QObject {
+class VideoReciever : public QThread {
     Q_OBJECT
 public:
     explicit VideoReciever( QObject *parent = nullptr );
-    void listen( const quint16 port );
+    ~VideoReciever( );
+
+    void listen( const quint16 port, const double interval = 0.33 );
     void stopListen( );
 signals:
-    void imgDataReceived( const QByteArray & );
+    void imgDataReceived( QByteArray );
+protected:
+    void run( ) override;
 private:
-    QUdpSocket  _server;
     int         _imgSize;
     QByteArray  _imgBytes;
-private slots:
-    void onReceiveData( );
+    quint16     _port;
+    double      _interval;
+    bool        _workInProgress{ false };
 };
 
 #endif // VIDEORECIEVER_H

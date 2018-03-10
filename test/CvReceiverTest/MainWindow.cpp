@@ -15,10 +15,11 @@ MainWindow::MainWindow( QWidget *parent ) :
 }
 
 MainWindow::~MainWindow( ) {
+    _receiver.stopListen( );
     delete ui;
 }
 
-void MainWindow::onReceiveData( const QByteArray &data ) {
+void MainWindow::onReceiveData( QByteArray data ) {
     _fpsChecker.stop( );
     _fpsChecker.start( );
     cv::namedWindow( "Receiver", cv::WINDOW_AUTOSIZE );
@@ -33,7 +34,6 @@ void MainWindow::onReceiveData( const QByteArray &data ) {
                      cv::Scalar( 255, 0, 0 ) );
         cv::imshow( "Receiver", img );
     }
-
 }
 
 void MainWindow::onListenClick( ) {

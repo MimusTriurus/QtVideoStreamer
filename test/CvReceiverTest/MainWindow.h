@@ -22,14 +22,14 @@ public:
     ~MainWindow( );
 private:
     Ui::MainWindow  *ui;
-    QLineEdit       _port{ "10000" };
     VideoReciever   _receiver;
-    bool            _isListen{ false };
-    QPushButton     _btnListen{ "Start" };
+    bool            _isListen   { false };
+    QPushButton     _btnListen  { "Start" };
+    QLineEdit       _port       { "10000" };
     FpsChecker      _fpsChecker;
     void initInterface( );
 private slots:
-    void onReceiveData( const QByteArray &data );
+    void onReceiveData( QByteArray data );
     void onListenClick( );
 };
 

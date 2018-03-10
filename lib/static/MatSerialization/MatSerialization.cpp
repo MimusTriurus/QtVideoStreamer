@@ -9,8 +9,7 @@ void MatSerialization::serializeMat( const cv::Mat &mat, std::vector<uchar> &out
     cv::imencode( MAT_EXT, mat, output, compressionParams );
 }
 
-cv::Mat MatSerialization::deserializeMat( const QByteArray &matData ) {
+cv::Mat MatSerialization::deserializeMat( const QByteArray &matData , cv::ImreadModes mode ) {
     std::vector<uchar> buffer( matData.cbegin( ), matData.cend( ) );
-    cv::Mat result = cv::imdecode( cv::Mat( buffer ), 1 );
-    return result;
+    return cv::imdecode( cv::Mat( buffer ), mode );
 }
