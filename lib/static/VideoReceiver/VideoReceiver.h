@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QUdpSocket>
 #include <QThread>
+#include <QMutex>
 
 /**
  * @brief Приемник видеопотока
@@ -16,16 +17,21 @@ public:
 
     void listen( const quint16 port, const double interval = 0.33 );
     void stopListen( );
+
+    const QByteArray &imgData( ) const;
 signals:
     void imgDataReceived( QByteArray );
 protected:
     void run( ) override;
 private:
     int         _imgSize;
-    QByteArray  _imgBytes;
+    QByteArray  _imgData;
+    QByteArray  _imgBuffer;
     quint16     _port;
     double      _interval;
     bool        _workInProgress{ false };
+
+    mutable QMutex _mutex;
 };
 
 #endif // VIDEORECIEVER_H

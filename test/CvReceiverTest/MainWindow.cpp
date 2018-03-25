@@ -10,6 +10,8 @@ MainWindow::MainWindow( QWidget *parent ) :
 
     connect( &_receiver, SIGNAL( imgDataReceived( QByteArray ) ),
              this, SLOT( onReceiveData( QByteArray ) ) );
+//    connect( &_tmrUpdate, SIGNAL( timeout( ) ), this, SLOT( update( ) ) );
+//    _tmrUpdate.setInterval( 33 );
 
     initInterface( );
 }
@@ -38,14 +40,35 @@ void MainWindow::onReceiveData( QByteArray data ) {
 
 void MainWindow::onListenClick( ) {
     if ( !_isListen ) {
+//        _tmrUpdate.start( );
         this->_receiver.listen( this->_port.text( ).toInt( ) );
         _btnListen.setText( "Stop" );
     }
     else {
+//        _tmrUpdate.stop( );
         _btnListen.setText( "Start" );
         this->_receiver.stopListen( );
     }
     _isListen = !_isListen;
+}
+
+void MainWindow::update( ) {
+    _fpsChecker.stop( );
+    _fpsChecker.start( );
+    cv::namedWindow( "Receiver", cv::WINDOW_AUTOSIZE );
+    if ( _receiver.imgData( ).isEmpty( ) )
+        return;
+    cv::Mat img{ MatSerialization::deserializeMat( _receiver.imgData( ) ) };
+    if ( !img.empty( ) ) {
+        cv::putText( img,
+                     cv::format( "FPS=%d",
+                     _fpsChecker.fps( ) ),
+                     cv::Point( 30, 30 ),
+                     cv::FONT_HERSHEY_SIMPLEX,
+                     0.8,
+                     cv::Scalar( 255, 0, 0 ) );
+        cv::imshow( "Receiver", img );
+    }
 }
 
 void MainWindow::initInterface( ) {

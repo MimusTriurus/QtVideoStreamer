@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <FpsChecker.h>
 #include <VideoReceiver.h>
+#include <QTimer>
 
 #include <opencv2/opencv.hpp>
 
@@ -27,10 +28,15 @@ private:
     QPushButton     _btnListen  { "Start" };
     QLineEdit       _port       { "10000" };
     FpsChecker      _fpsChecker;
+
+    QTimer          _tmrUpdate;
+
     void initInterface( );
 private slots:
     void onReceiveData( QByteArray data );
     void onListenClick( );
+
+    void update( );
 };
 
 #endif // MAINWINDOW_H

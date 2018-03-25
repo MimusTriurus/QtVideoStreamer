@@ -1,4 +1,5 @@
 #include "VideoReceiver.h"
+#include <QCoreApplication>
 #include <QDebug>
 
 VideoReciever::VideoReciever( QObject *parent ) :
@@ -29,11 +30,16 @@ void VideoReciever::stopListen( ) {
     this->_workInProgress = false;
 }
 
+const QByteArray &VideoReciever::imgData( ) const {
+    QMutexLocker locker ( &_mutex );
+    return _imgData;
+}
+
 void VideoReciever::run( ) {
     auto server = new QUdpSocket( );
     server->bind( _port );
     while ( _workInProgress ) {
-
+        QCoreApplication::processEvents( );
         while ( server->hasPendingDatagrams( ) ) {
             QByteArray datagram;
             datagram.resize( server->pendingDatagramSize( ) );
@@ -41,20 +47,19 @@ void VideoReciever::run( ) {
             server->readDatagram( datagram.data( ), datagram.size( ), &address );
             int msgSize{ datagram.size( ) };
             if ( msgSize == sizeof( int ) ) {
-                if ( _imgBytes.count( ) == _imgSize ) {
-                    emit imgDataReceived( _imgBytes );
+                if ( _imgBuffer.count( ) == _imgSize ) {
+                    _imgData = _imgBuffer;
+                    emit imgDataReceived( _imgBuffer );
                 }
                 else
-                    qDebug( ) << "crash on receive img data" << _imgBytes.count( ) << "!=" << _imgSize;
-                _imgBytes.clear( );
+                    qDebug( ) << "crash on receive img data" << _imgBuffer.count( ) << "!=" << _imgSize;
+                _imgBuffer.clear( );
                 QDataStream stream( datagram );
                 stream >> _imgSize;
             }
             else
-                _imgBytes.append( datagram );
+                _imgBuffer.append( datagram );
         }
-
-        QThread::msleep( _interval );
     }
     server->close( );
     delete server;

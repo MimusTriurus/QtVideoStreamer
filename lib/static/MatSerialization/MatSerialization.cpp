@@ -11,5 +11,8 @@ void MatSerialization::serializeMat( const cv::Mat &mat, std::vector<uchar> &out
 
 cv::Mat MatSerialization::deserializeMat( const QByteArray &matData , cv::ImreadModes mode ) {
     std::vector<uchar> buffer( matData.cbegin( ), matData.cend( ) );
-    return cv::imdecode( cv::Mat( buffer ), mode );
+    if ( !buffer.empty( ) )
+        return cv::imdecode( cv::Mat( buffer ), mode );
+    else
+        return cv::Mat( );
 }
