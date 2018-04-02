@@ -6,7 +6,7 @@ VideoReciever::VideoReciever( QObject *parent ) :
     QThread( parent ),
     _imgSize    { -1 },
     _port       { 10000 },
-    _interval   { 0.33 }
+    _interval   { 5 }
 {
 
 }
@@ -60,6 +60,7 @@ void VideoReciever::run( ) {
             else
                 _imgBuffer.append( datagram );
         }
+        QThread::msleep( _interval );
     }
     server->close( );
     delete server;
