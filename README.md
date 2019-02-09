@@ -46,4 +46,4 @@ OpenCV relies on the V4L2 (Video for Linux) module, so try adding the following 
 bcm2835-v4l2
 This ensures that the Broadcom Video For Linux 2 (v4l2) driver is loaded at all subsequent reboots.
 
-Binaty files Win x64 - https://cloud.mail.ru/public/LtSM/XU1EyMhwK
+Binary files Win x64 - https://cloud.mail.ru/public/LtSM/XU1EyMhwK
