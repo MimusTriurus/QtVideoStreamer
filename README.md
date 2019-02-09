@@ -22,7 +22,7 @@ System requirements:
 ----------------------------------------------
 1. ОС: Windows, Linux;
 2. Qt 5.5.1 or higher;
-3. OpenCV 2.4 or higher;
+3. OpenCV 3 or higher;
 4. Compiler with support for c++ 11;
 5. Web-camera.
 
