@@ -59,7 +59,7 @@ class DynamicBitset
 public:
     /** default constructor
      */
-    DynamicBitset() : size_(0)
+    DynamicBitset()
     {
     }
 

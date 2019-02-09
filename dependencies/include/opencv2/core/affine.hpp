@@ -41,8 +41,8 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_AFFINE3_HPP
-#define OPENCV_CORE_AFFINE3_HPP
+#ifndef __OPENCV_CORE_AFFINE3_HPP__
+#define __OPENCV_CORE_AFFINE3_HPP__
 
 #ifdef __cplusplus
 
@@ -153,23 +153,14 @@ namespace cv
         typedef _Tp                                        channel_type;
 
         enum { generic_type = 0,
+               depth        = DataType<channel_type>::depth,
                channels     = 16,
-               fmt          = traits::SafeFmt<channel_type>::fmt + ((channels - 1) << 8)
-#ifdef OPENCV_TRAITS_ENABLE_DEPRECATED
-               ,depth        = DataType<channel_type>::depth
-               ,type         = CV_MAKETYPE(depth, channels)
-#endif
+               fmt          = DataType<channel_type>::fmt + ((channels - 1) << 8),
+               type         = CV_MAKETYPE(depth, channels)
              };
 
         typedef Vec<channel_type, channels> vec_type;
     };
-
-    namespace traits {
-    template<typename _Tp>
-    struct Depth< Affine3<_Tp> > { enum { value = Depth<_Tp>::value }; };
-    template<typename _Tp>
-    struct Type< Affine3<_Tp> > { enum { value = CV_MAKETYPE(Depth<_Tp>::value, 16) }; };
-    } // namespace
 
 //! @} core
 
@@ -211,7 +202,7 @@ cv::Affine3<T>::Affine3(const Vec3& _rvec, const Vec3& t)
 template<typename T> inline
 cv::Affine3<T>::Affine3(const cv::Mat& data, const Vec3& t)
 {
-    CV_Assert(data.type() == cv::traits::Type<T>::value);
+    CV_Assert(data.type() == cv::DataType<T>::type);
 
     if (data.cols == 4 && data.rows == 4)
     {
@@ -222,13 +213,11 @@ cv::Affine3<T>::Affine3(const cv::Mat& data, const Vec3& t)
     {
         rotation(data(Rect(0, 0, 3, 3)));
         translation(data(Rect(3, 0, 1, 3)));
-    }
-    else
-    {
-        rotation(data);
-        translation(t);
+        return;
     }
 
+    rotation(data);
+    translation(t);
     matrix.val[12] = matrix.val[13] = matrix.val[14] = 0;
     matrix.val[15] = 1;
 }
@@ -252,25 +241,30 @@ void cv::Affine3<T>::rotation(const Mat3& R)
 template<typename T> inline
 void cv::Affine3<T>::rotation(const Vec3& _rvec)
 {
-    double theta = norm(_rvec);
+    double rx = _rvec[0], ry = _rvec[1], rz = _rvec[2];
+    double theta = std::sqrt(rx*rx + ry*ry + rz*rz);
 
     if (theta < DBL_EPSILON)
         rotation(Mat3::eye());
     else
     {
+        const double I[] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
+
         double c = std::cos(theta);
         double s = std::sin(theta);
         double c1 = 1. - c;
         double itheta = (theta != 0) ? 1./theta : 0.;
 
-        Point3_<T> r = _rvec*itheta;
+        rx *= itheta; ry *= itheta; rz *= itheta;
 
-        Mat3 rrt( r.x*r.x, r.x*r.y, r.x*r.z, r.x*r.y, r.y*r.y, r.y*r.z, r.x*r.z, r.y*r.z, r.z*r.z );
-        Mat3 r_x( 0, -r.z, r.y, r.z, 0, -r.x, -r.y, r.x, 0 );
+        double rrt[] = { rx*rx, rx*ry, rx*rz, rx*ry, ry*ry, ry*rz, rx*rz, ry*rz, rz*rz };
+        double _r_x_[] = { 0, -rz, ry, rz, 0, -rx, -ry, rx, 0 };
+        Mat3 R;
 
         // R = cos(theta)*I + (1 - cos(theta))*r*rT + sin(theta)*[r_x]
         // where [r_x] is [0 -rz ry; rz 0 -rx; -ry rx 0]
-        Mat3 R = c*Mat3::eye() + c1*rrt + s*r_x;
+        for(int k = 0; k < 9; ++k)
+            R.val[k] = static_cast<float_type>(c*I[k] + c1*rrt[k] + s*_r_x_[k]);
 
         rotation(R);
     }
@@ -280,7 +274,7 @@ void cv::Affine3<T>::rotation(const Vec3& _rvec)
 template<typename T> inline
 void cv::Affine3<T>::rotation(const cv::Mat& data)
 {
-    CV_Assert(data.type() == cv::traits::Type<T>::value);
+    CV_Assert(data.type() == cv::DataType<T>::type);
 
     if (data.cols == 3 && data.rows == 3)
     {
@@ -494,21 +488,21 @@ cv::Vec3d cv::operator*(const cv::Affine3d& affine, const cv::Vec3d& v)
 template<typename T> inline
 cv::Affine3<T>::Affine3(const Eigen::Transform<T, 3, Eigen::Affine, (Eigen::RowMajor)>& affine)
 {
-    cv::Mat(4, 4, cv::traits::Type<T>::value, affine.matrix().data()).copyTo(matrix);
+    cv::Mat(4, 4, cv::DataType<T>::type, affine.matrix().data()).copyTo(matrix);
 }
 
 template<typename T> inline
 cv::Affine3<T>::Affine3(const Eigen::Transform<T, 3, Eigen::Affine>& affine)
 {
     Eigen::Transform<T, 3, Eigen::Affine, (Eigen::RowMajor)> a = affine;
-    cv::Mat(4, 4, cv::traits::Type<T>::value, a.matrix().data()).copyTo(matrix);
+    cv::Mat(4, 4, cv::DataType<T>::type, a.matrix().data()).copyTo(matrix);
 }
 
 template<typename T> inline
 cv::Affine3<T>::operator Eigen::Transform<T, 3, Eigen::Affine, (Eigen::RowMajor)>() const
 {
     Eigen::Transform<T, 3, Eigen::Affine, (Eigen::RowMajor)> r;
-    cv::Mat hdr(4, 4, cv::traits::Type<T>::value, r.matrix().data());
+    cv::Mat hdr(4, 4, cv::DataType<T>::type, r.matrix().data());
     cv::Mat(matrix, false).copyTo(hdr);
     return r;
 }
@@ -525,4 +519,4 @@ cv::Affine3<T>::operator Eigen::Transform<T, 3, Eigen::Affine>() const
 
 #endif /* __cplusplus */
 
-#endif /* OPENCV_CORE_AFFINE3_HPP */
+#endif /* __OPENCV_CORE_AFFINE3_HPP__ */

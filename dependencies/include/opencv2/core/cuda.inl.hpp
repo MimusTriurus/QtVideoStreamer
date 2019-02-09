@@ -41,8 +41,8 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_CUDAINL_HPP
-#define OPENCV_CORE_CUDAINL_HPP
+#ifndef __OPENCV_CORE_CUDAINL_HPP__
+#define __OPENCV_CORE_CUDAINL_HPP__
 
 #include "opencv2/core/cuda.hpp"
 
@@ -628,4 +628,4 @@ Mat::Mat(const cuda::GpuMat& m)
 
 //! @endcond
 
-#endif // OPENCV_CORE_CUDAINL_HPP
+#endif // __OPENCV_CORE_CUDAINL_HPP__

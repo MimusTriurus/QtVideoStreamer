@@ -42,8 +42,8 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_SATURATE_HPP
-#define OPENCV_CORE_SATURATE_HPP
+#ifndef __OPENCV_CORE_SATURATE_HPP__
+#define __OPENCV_CORE_SATURATE_HPP__
 
 #include "opencv2/core/cvdef.h"
 #include "opencv2/core/fast_math.hpp"
@@ -147,4 +147,4 @@ template<> inline unsigned saturate_cast<unsigned>(double v) { return cvRound(v)
 
 } // cv
 
-#endif // OPENCV_CORE_SATURATE_HPP
+#endif // __OPENCV_CORE_SATURATE_HPP__

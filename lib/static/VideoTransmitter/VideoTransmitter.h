@@ -10,7 +10,6 @@ class VideoTransmitter : public QObject {
     Q_OBJECT
 public:
     VideoTransmitter( QString host = "localhost", quint16 port = 10000, QObject *parent = nullptr );
-    VideoTransmitter( ) = delete;
     void setQuality( const int quality );
     void host( const QString &host );
     void port( const quint16 port );

@@ -40,12 +40,8 @@
 //
 //M*/
 
-#ifndef OPENCV_STITCHING_BLENDERS_HPP
-#define OPENCV_STITCHING_BLENDERS_HPP
-
-#if defined(NO)
-#  warning Detected Apple 'NO' macro definition, it can cause build conflicts. Please, include this header before any Apple headers.
-#endif
+#ifndef __OPENCV_STITCHING_BLENDERS_HPP__
+#define __OPENCV_STITCHING_BLENDERS_HPP__
 
 #include "opencv2/core.hpp"
 
@@ -142,10 +138,6 @@ private:
     Rect dst_roi_final_;
     bool can_use_gpu_;
     int weight_type_; //CV_32F or CV_16S
-#if defined(HAVE_OPENCV_CUDAARITHM) && defined(HAVE_OPENCV_CUDAWARPING)
-    std::vector<cuda::GpuMat> gpu_dst_pyr_laplace_;
-    std::vector<cuda::GpuMat> gpu_dst_band_weights_;
-#endif
 };
 
 
@@ -168,4 +160,4 @@ void CV_EXPORTS restoreImageFromLaplacePyrGpu(std::vector<UMat>& pyr);
 } // namespace detail
 } // namespace cv
 
-#endif // OPENCV_STITCHING_BLENDERS_HPP
+#endif // __OPENCV_STITCHING_BLENDERS_HPP__

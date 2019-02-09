@@ -874,8 +874,6 @@ private:
             computeClustering(node->childs[c],indices+start, end-start, branching, level+1);
             start=end;
         }
-
-        delete[] centers;
     }
 
 

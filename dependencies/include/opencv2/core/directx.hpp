@@ -39,8 +39,8 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_DIRECTX_HPP
-#define OPENCV_CORE_DIRECTX_HPP
+#ifndef __OPENCV_CORE_DIRECTX_HPP__
+#define __OPENCV_CORE_DIRECTX_HPP__
 
 #include "mat.hpp"
 #include "ocl.hpp"
@@ -181,4 +181,4 @@ CV_EXPORTS int getTypeFromD3DFORMAT(const int iD3DFORMAT); // enum D3DTYPE for D
 
 } } // namespace cv::directx
 
-#endif // OPENCV_CORE_DIRECTX_HPP
+#endif // __OPENCV_CORE_DIRECTX_HPP__

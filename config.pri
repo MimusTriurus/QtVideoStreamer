@@ -18,7 +18,8 @@ win32 {
         #message("64-bit")
         OPENCV_LIBS_PATH   = -L$$PWD/dependencies/lib/x64/
     }
-    LIBS += $$OPENCV_LIBS_PATH -lopencv_world331
+    # версия opencv
+    LIBS += $$OPENCV_LIBS_PATH -lopencv_world310
 
     INCLUDEPATH += $$OPENCV_INCLUDEPATH
     DEPENDPATH += $$OPENCV_DEPENDPATH

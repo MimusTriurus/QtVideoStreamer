@@ -41,8 +41,8 @@
 //
 //M*/
 
-#ifndef OPENCV_OBJDETECT_C_H
-#define OPENCV_OBJDETECT_C_H
+#ifndef __OPENCV_OBJDETECT_C_H__
+#define __OPENCV_OBJDETECT_C_H__
 
 #include "opencv2/core/core_c.h"
 
@@ -69,7 +69,6 @@ extern "C" {
     (((const CvHaarClassifierCascade*)(haar))->flags & CV_MAGIC_MASK)==CV_HAAR_MAGIC_VAL)
 
 #define CV_HAAR_FEATURE_MAX  3
-#define CV_HAAR_STAGE_MAX 1000
 
 typedef struct CvHaarFeature
 {
@@ -163,4 +162,4 @@ CV_EXPORTS CvSeq* cvHaarDetectObjectsForROC( const CvArr* image,
 
 #endif
 
-#endif /* OPENCV_OBJDETECT_C_H */
+#endif /* __OPENCV_OBJDETECT_C_H__ */

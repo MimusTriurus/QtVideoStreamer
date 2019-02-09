@@ -41,21 +41,19 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_CVSTDINL_HPP
-#define OPENCV_CORE_CVSTDINL_HPP
+#ifndef __OPENCV_CORE_CVSTDINL_HPP__
+#define __OPENCV_CORE_CVSTDINL_HPP__
 
-#include <complex>
-#include <ostream>
+#ifndef OPENCV_NOSTL
+#  include <complex>
+#  include <ostream>
+#endif
 
 //! @cond IGNORED
 
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable: 4127 )
-#endif
-
 namespace cv
 {
+#ifndef OPENCV_NOSTL
 
 template<typename _Tp> class DataType< std::complex<_Tp> >
 {
@@ -80,7 +78,7 @@ String::String(const std::string& str)
     if (!str.empty())
     {
         size_t len = str.size();
-        if (len) memcpy(allocate(len), str.c_str(), len);
+        memcpy(allocate(len), str.c_str(), len);
     }
 }
 
@@ -102,7 +100,7 @@ String& String::operator = (const std::string& str)
     if (!str.empty())
     {
         size_t len = str.size();
-        if (len) memcpy(allocate(len), str.c_str(), len);
+        memcpy(allocate(len), str.c_str(), len);
     }
     return *this;
 }
@@ -126,8 +124,8 @@ String operator + (const String& lhs, const std::string& rhs)
     String s;
     size_t rhslen = rhs.size();
     s.allocate(lhs.len_ + rhslen);
-    if (lhs.len_) memcpy(s.cstr_, lhs.cstr_, lhs.len_);
-    if (rhslen) memcpy(s.cstr_ + lhs.len_, rhs.c_str(), rhslen);
+    memcpy(s.cstr_, lhs.cstr_, lhs.len_);
+    memcpy(s.cstr_ + lhs.len_, rhs.c_str(), rhslen);
     return s;
 }
 
@@ -137,8 +135,8 @@ String operator + (const std::string& lhs, const String& rhs)
     String s;
     size_t lhslen = lhs.size();
     s.allocate(lhslen + rhs.len_);
-    if (lhslen) memcpy(s.cstr_, lhs.c_str(), lhslen);
-    if (rhs.len_) memcpy(s.cstr_ + lhslen, rhs.cstr_, rhs.len_);
+    memcpy(s.cstr_, lhs.c_str(), lhslen);
+    memcpy(s.cstr_ + lhslen, rhs.cstr_, rhs.len_);
     return s;
 }
 
@@ -153,7 +151,9 @@ FileNode::operator std::string() const
 template<> inline
 void operator >> (const FileNode& n, std::string& value)
 {
-    read(n, value, std::string());
+    String val;
+    read(n, val, val);
+    value = val;
 }
 
 template<> inline
@@ -181,18 +181,6 @@ static inline
 std::ostream& operator << (std::ostream& out, const Mat& mtx)
 {
     return out << Formatter::get()->format(mtx);
-}
-
-static inline
-std::ostream& operator << (std::ostream& out, const UMat& m)
-{
-    return out << m.getMat(ACCESS_READ);
-}
-
-template<typename _Tp> static inline
-std::ostream& operator << (std::ostream& out, const Complex<_Tp>& c)
-{
-    return out << "(" << c.re << "," << c.im << ")";
 }
 
 template<typename _Tp> static inline
@@ -233,7 +221,14 @@ template<typename _Tp, int n> static inline
 std::ostream& operator << (std::ostream& out, const Vec<_Tp, n>& vec)
 {
     out << "[";
-    if (cv::traits::Depth<_Tp>::value <= CV_32S)
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable: 4127 )
+#endif
+    if(Vec<_Tp, n>::depth < CV_32F)
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
     {
         for (int i = 0; i < n - 1; ++i) {
             out << (int)vec[i] << ", ";
@@ -263,24 +258,10 @@ std::ostream& operator << (std::ostream& out, const Rect_<_Tp>& rect)
     return out << "[" << rect.width << " x " << rect.height << " from (" << rect.x << ", " << rect.y << ")]";
 }
 
-static inline std::ostream& operator << (std::ostream& out, const MatSize& msize)
-{
-    int i, dims = msize.p[-1];
-    for( i = 0; i < dims; i++ )
-    {
-        out << msize.p[i];
-        if( i < dims-1 )
-            out << " x ";
-    }
-    return out;
-}
 
+#endif // OPENCV_NOSTL
 } // cv
-
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
 
 //! @endcond
 
-#endif // OPENCV_CORE_CVSTDINL_HPP
+#endif // __OPENCV_CORE_CVSTDINL_HPP__

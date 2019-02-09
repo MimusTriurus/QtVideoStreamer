@@ -40,8 +40,8 @@
 //
 //M*/
 
-#ifndef OPENCV_VIDEOSTAB_GLOBAL_MOTION_HPP
-#define OPENCV_VIDEOSTAB_GLOBAL_MOTION_HPP
+#ifndef __OPENCV_VIDEOSTAB_GLOBAL_MOTION_HPP__
+#define __OPENCV_VIDEOSTAB_GLOBAL_MOTION_HPP__
 
 #include <vector>
 #include <fstream>
@@ -236,7 +236,6 @@ public:
     Ptr<IOutlierRejector> outlierRejector() const { return outlierRejector_; }
 
     virtual Mat estimate(const Mat &frame0, const Mat &frame1, bool *ok = 0);
-    Mat estimate(InputArray frame0, InputArray frame1, bool *ok = 0);
 
 private:
     Ptr<MotionEstimatorBase> motionEstimator_;

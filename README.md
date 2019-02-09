@@ -29,7 +29,7 @@ System requirements:
 Setup for Windows:
 ----------------------------------------------
 1. Clone the repository;
-2. If required, specify in file config.pri the path to directory of opencv libraries, the name of the libraries and the path to header files (by default  config.pri has the link to “dependencies” of the project with  binary files of opencv2 VC14);
+2. If required, specify in file config.pri the path to directory of opencv libraries, the name of the libraries and the path to header files (by default  config.pri has the link to “dependencies” of the project with  binary files of opencv3 VC12 x64);
 3. Build the project.
 
 Setup for Linux:
@@ -43,7 +43,7 @@ Compiled applications are located in folder “bin”
 Remarks:
 ----------------------------------------------
 OpenCV relies on the V4L2 (Video for Linux) module, so try adding the following line at the bottom of the file /etc/modules and rebooting your Raspberry Pi.
-
 bcm2835-v4l2
-
 This ensures that the Broadcom Video For Linux 2 (v4l2) driver is loaded at all subsequent reboots.
+
+Binaty files Win x64 - https://cloud.mail.ru/public/LtSM/XU1EyMhwK

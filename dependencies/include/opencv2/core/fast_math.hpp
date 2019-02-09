@@ -42,16 +42,10 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_FAST_MATH_HPP
-#define OPENCV_CORE_FAST_MATH_HPP
+#ifndef __OPENCV_CORE_FAST_MATH_HPP__
+#define __OPENCV_CORE_FAST_MATH_HPP__
 
 #include "opencv2/core/cvdef.h"
-
-#if ((defined _MSC_VER && defined _M_X64) || (defined __GNUC__ && defined __x86_64__ \
-    && defined __SSE2__ && !defined __APPLE__)) && !defined(__CUDACC__)
-#include <emmintrin.h>
-#endif
-
 
 //! @addtogroup core_utils
 //! @{
@@ -60,27 +54,24 @@
 *                                      fast math                                         *
 \****************************************************************************************/
 
-#ifdef __cplusplus
+#if defined __BORLANDC__
+#  include <fastmath.h>
+#elif defined __cplusplus
 #  include <cmath>
 #else
-#  ifdef __BORLANDC__
-#    include <fastmath.h>
-#  else
-#    include <math.h>
-#  endif
+#  include <math.h>
 #endif
 
 #ifdef HAVE_TEGRA_OPTIMIZATION
 #  include "tegra_round.hpp"
 #endif
 
-#if defined __GNUC__ && defined __arm__ && (defined __ARM_PCS_VFP || defined __ARM_VFPV3__ || defined __ARM_NEON__) && !defined __SOFTFP__ && !defined(__CUDACC__)
+#if CV_VFP
     // 1. general scheme
     #define ARM_ROUND(_value, _asm_string) \
         int res; \
         float temp; \
-        (void)temp; \
-        __asm__(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
+        asm(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value)); \
         return res
     // 2. version for double
     #ifdef __clang__
@@ -90,7 +81,7 @@
     #endif
     // 3. version for float
     #define ARM_ROUND_FLT(value) ARM_ROUND(value, "vcvtr.s32.f32 %[temp], %[value]\n vmov %[res], %[temp]")
-#endif
+#endif // CV_VFP
 
 /** @brief Rounds floating-point number to the nearest integer
 
@@ -101,7 +92,7 @@ CV_INLINE int
 cvRound( double value )
 {
 #if ((defined _MSC_VER && defined _M_X64) || (defined __GNUC__ && defined __x86_64__ \
-    && defined __SSE2__ && !defined __APPLE__) || CV_SSE2) && !defined(__CUDACC__)
+    && defined __SSE2__ && !defined __APPLE__)) && !defined(__CUDACC__)
     __m128d t = _mm_set_sd( value );
     return _mm_cvtsd_si32(t);
 #elif defined _MSC_VER && defined _M_IX86
@@ -116,7 +107,7 @@ cvRound( double value )
         defined __GNUC__) && defined HAVE_TEGRA_OPTIMIZATION
     TEGRA_ROUND_DBL(value);
 #elif defined CV_ICC || defined __GNUC__
-# if defined ARM_ROUND_DBL
+# if CV_VFP
     ARM_ROUND_DBL(value);
 # else
     return (int)lrint(value);
@@ -138,8 +129,18 @@ cvRound( double value )
  */
 CV_INLINE int cvFloor( double value )
 {
+#if (defined _MSC_VER && defined _M_X64 || (defined __GNUC__ && defined __SSE2__ && !defined __APPLE__)) && !defined(__CUDACC__)
+    __m128d t = _mm_set_sd( value );
+    int i = _mm_cvtsd_si32(t);
+    return i - _mm_movemask_pd(_mm_cmplt_sd(t, _mm_cvtsi32_sd(t,i)));
+#elif defined __GNUC__
     int i = (int)value;
     return i - (i > value);
+#else
+    int i = cvRound(value);
+    float diff = (float)(value - i);
+    return i - (diff < 0);
+#endif
 }
 
 /** @brief Rounds floating-point number to the nearest integer not smaller than the original.
@@ -151,8 +152,18 @@ CV_INLINE int cvFloor( double value )
  */
 CV_INLINE int cvCeil( double value )
 {
+#if (defined _MSC_VER && defined _M_X64 || (defined __GNUC__ && defined __SSE2__&& !defined __APPLE__)) && !defined(__CUDACC__)
+    __m128d t = _mm_set_sd( value );
+    int i = _mm_cvtsd_si32(t);
+    return i + _mm_movemask_pd(_mm_cmplt_sd(_mm_cvtsi32_sd(t,i), t));
+#elif defined __GNUC__
     int i = (int)value;
     return i + (i < value);
+#else
+    int i = cvRound(value);
+    float diff = (float)(i - value);
+    return i + (diff < 0);
+#endif
 }
 
 /** @brief Determines if the argument is Not A Number.
@@ -188,8 +199,8 @@ CV_INLINE int cvIsInf( double value )
 /** @overload */
 CV_INLINE int cvRound(float value)
 {
-#if ((defined _MSC_VER && defined _M_X64) || (defined __GNUC__ && defined __x86_64__ \
-    && defined __SSE2__ && !defined __APPLE__) || CV_SSE2) && !defined(__CUDACC__)
+#if ((defined _MSC_VER && defined _M_X64) || (defined __GNUC__ && defined __x86_64__ && \
+      defined __SSE2__ && !defined __APPLE__)) && !defined(__CUDACC__)
     __m128 t = _mm_set_ss( value );
     return _mm_cvtss_si32(t);
 #elif defined _MSC_VER && defined _M_IX86
@@ -204,7 +215,7 @@ CV_INLINE int cvRound(float value)
         defined __GNUC__) && defined HAVE_TEGRA_OPTIMIZATION
     TEGRA_ROUND_FLT(value);
 #elif defined CV_ICC || defined __GNUC__
-# if defined ARM_ROUND_FLT
+# if CV_VFP
     ARM_ROUND_FLT(value);
 # else
     return (int)lrintf(value);
@@ -225,8 +236,18 @@ CV_INLINE int cvRound( int value )
 /** @overload */
 CV_INLINE int cvFloor( float value )
 {
+#if (defined _MSC_VER && defined _M_X64 || (defined __GNUC__ && defined __SSE2__ && !defined __APPLE__)) && !defined(__CUDACC__)
+    __m128 t = _mm_set_ss( value );
+    int i = _mm_cvtss_si32(t);
+    return i - _mm_movemask_ps(_mm_cmplt_ss(t, _mm_cvtsi32_ss(t,i)));
+#elif defined __GNUC__
     int i = (int)value;
     return i - (i > value);
+#else
+    int i = cvRound(value);
+    float diff = (float)(value - i);
+    return i - (diff < 0);
+#endif
 }
 
 /** @overload */
@@ -238,8 +259,18 @@ CV_INLINE int cvFloor( int value )
 /** @overload */
 CV_INLINE int cvCeil( float value )
 {
+#if (defined _MSC_VER && defined _M_X64 || (defined __GNUC__ && defined __SSE2__&& !defined __APPLE__)) && !defined(__CUDACC__)
+    __m128 t = _mm_set_ss( value );
+    int i = _mm_cvtss_si32(t);
+    return i + _mm_movemask_ps(_mm_cmplt_ss(_mm_cvtsi32_ss(t,i), t));
+#elif defined __GNUC__
     int i = (int)value;
     return i + (i < value);
+#else
+    int i = cvRound(value);
+    float diff = (float)(i - value);
+    return i + (diff < 0);
+#endif
 }
 
 /** @overload */

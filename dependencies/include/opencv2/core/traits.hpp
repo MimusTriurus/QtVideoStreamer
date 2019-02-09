@@ -41,22 +41,18 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_TRAITS_HPP
-#define OPENCV_CORE_TRAITS_HPP
+#ifndef __OPENCV_CORE_TRAITS_HPP__
+#define __OPENCV_CORE_TRAITS_HPP__
 
 #include "opencv2/core/cvdef.h"
 
 namespace cv
 {
 
-//#define OPENCV_TRAITS_ENABLE_DEPRECATED
-
 //! @addtogroup core_basic
 //! @{
 
 /** @brief Template "trait" class for OpenCV primitive data types.
-
-@note Deprecated. This is replaced by "single purpose" traits: traits::Type and traits::Depth
 
 A primitive OpenCV data type is one of unsigned char, bool, signed char, unsigned short, signed
 short, int, float, double, or a tuple of values of one of these types, where all the values in the
@@ -106,13 +102,10 @@ So, such traits are used to tell OpenCV which data type you are working with, ev
 not native to OpenCV. For example, the matrix B initialization above is compiled because OpenCV
 defines the proper specialized template class DataType\<complex\<_Tp\> \> . This mechanism is also
 useful (and used in OpenCV this way) for generic algorithms implementations.
-
-@note Default values were dropped to stop confusing developers about using of unsupported types (see #7599)
 */
 template<typename _Tp> class DataType
 {
 public:
-#ifdef OPENCV_TRAITS_ENABLE_DEPRECATED
     typedef _Tp         value_type;
     typedef value_type  work_type;
     typedef value_type  channel_type;
@@ -123,7 +116,6 @@ public:
            fmt          = 0,
            type = CV_MAKETYPE(depth, channels)
          };
-#endif
 };
 
 template<> class DataType<bool>
@@ -278,14 +270,11 @@ public:
 };
 
 
-#ifdef OPENCV_TRAITS_ENABLE_DEPRECATED
 
 template<int _depth> class TypeDepth
 {
-#ifdef OPENCV_TRAITS_ENABLE_LEGACY_DEFAULTS
     enum { depth = CV_USRTYPE1 };
     typedef void value_type;
-#endif
 };
 
 template<> class TypeDepth<CV_8U>
@@ -330,68 +319,8 @@ template<> class TypeDepth<CV_64F>
     typedef double value_type;
 };
 
-#endif
-
 //! @}
-
-namespace traits {
-
-namespace internal {
-#define CV_CREATE_MEMBER_CHECK(X) \
-template<typename T> class CheckMember_##X { \
-    struct Fallback { int X; }; \
-    struct Derived : T, Fallback { }; \
-    template<typename U, U> struct Check; \
-    typedef char CV_NO[1]; \
-    typedef char CV_YES[2]; \
-    template<typename U> static CV_NO & func(Check<int Fallback::*, &U::X> *); \
-    template<typename U> static CV_YES & func(...); \
-public: \
-    typedef CheckMember_##X type; \
-    enum { value = sizeof(func<Derived>(0)) == sizeof(CV_YES) }; \
-};
-
-CV_CREATE_MEMBER_CHECK(fmt)
-CV_CREATE_MEMBER_CHECK(type)
-
-} // namespace internal
-
-
-template<typename T>
-struct Depth
-{ enum { value = DataType<T>::depth }; };
-
-template<typename T>
-struct Type
-{ enum { value = DataType<T>::type }; };
-
-/** Similar to traits::Type<T> but has value = -1 in case of unknown type (instead of compiler error) */
-template<typename T, bool available = internal::CheckMember_type< DataType<T> >::value >
-struct SafeType {};
-
-template<typename T>
-struct SafeType<T, false>
-{ enum { value = -1 }; };
-
-template<typename T>
-struct SafeType<T, true>
-{ enum { value = Type<T>::value }; };
-
-
-template<typename T, bool available = internal::CheckMember_fmt< DataType<T> >::value >
-struct SafeFmt {};
-
-template<typename T>
-struct SafeFmt<T, false>
-{ enum { fmt = 0 }; };
-
-template<typename T>
-struct SafeFmt<T, true>
-{ enum { fmt = DataType<T>::fmt }; };
-
-
-} // namespace
 
 } // cv
 
-#endif // OPENCV_CORE_TRAITS_HPP
+#endif // __OPENCV_CORE_TRAITS_HPP__

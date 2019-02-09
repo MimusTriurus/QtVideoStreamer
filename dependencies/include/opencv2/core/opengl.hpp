@@ -40,8 +40,8 @@
 //
 //M*/
 
-#ifndef OPENCV_CORE_OPENGL_HPP
-#define OPENCV_CORE_OPENGL_HPP
+#ifndef __OPENCV_CORE_OPENGL_HPP__
+#define __OPENCV_CORE_OPENGL_HPP__
 
 #ifndef __cplusplus
 #  error opengl.hpp header must be compiled as C++
@@ -726,4 +726,4 @@ bool cv::ogl::Arrays::empty() const
 
 //! @endcond
 
-#endif /* OPENCV_CORE_OPENGL_HPP */
+#endif /* __OPENCV_CORE_OPENGL_HPP__ */
