@@ -23,12 +23,12 @@ private:
     Capture     _capture;
     FpsChecker  _fpsChecker;
     QTimer      _tmrFrameUpdate;
-    bool        _start{ false };
+    bool        _start;
 
-    QLineEdit   _camIndex       { "0" };
-    QLineEdit   _camFps         { "30" };
-    QCheckBox   _showCameraWin  { "Show Camera Win" };
-    QPushButton _btnStart       { "Start" };
+    QLineEdit   _camIndex;
+    QLineEdit   _camFps;
+    QCheckBox   _showCameraWin;
+    QPushButton _btnStart;
     void initInterface( );
 private slots:
     void onNewCvFrame( );

@@ -3,10 +3,11 @@
 #include <QDebug>
 
 VideoReciever::VideoReciever( QObject *parent ) :
-    QThread( parent ),
-    _imgSize    { -1 },
-    _port       { 10000 },
-    _interval   { 5 }
+    QThread         { parent },
+    _imgSize        { -1 },
+    _port           { 10000 },
+    _interval       { 5 },
+    _workInProgress { false }
 {
 
 }

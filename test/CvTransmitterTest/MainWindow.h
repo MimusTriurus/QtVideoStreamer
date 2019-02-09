@@ -28,32 +28,32 @@ public:
 private:
     Ui::MainWindow      *ui;
 
-    bool                _cameraIsOpen   { false };
-    bool                _showFrameWindow{ false };
-    bool                _grayScale      { false };
-    bool                _link           { false };
-    bool                _resizeFrame    { false };
-    int                 _qual           { 50 };
+    bool                _cameraIsOpen;
+    bool                _showFrameWindow;
+    bool                _grayScale;
+    bool                _link;
+    bool                _resizeFrame;
+    int                 _qual;
 
     Capture             _capture;
     QTimer              _tmrFrameUpdate;
     VideoTransmitter    _transmitter;
 
-    QLineEdit           _cameraId    { "0" };
-    QLineEdit           _host        { "192.168.1.51" };
-    QLineEdit           _port        { "10000" };
+    QLineEdit           _cameraId;
+    QLineEdit           _host;
+    QLineEdit           _port;
     QTextEdit           _log;
-    QCheckBox           _showFrameWin{ "Show frame window" };
-    QCheckBox           _toGrayscale { "Convert BGR2RGB" };
-    QCheckBox           _resize      { "Resize to 320x240" };
-    QLineEdit           _quality     { "50" };
+    QCheckBox           _showFrameWin;
+    QCheckBox           _toGrayscale;
+    QCheckBox           _resize;
+    QLineEdit           _quality;
 
-    QLineEdit           _width       { "640" };
-    QLineEdit           _height      { "480" };
+    QLineEdit           _width;
+    QLineEdit           _height;
 
-    QLineEdit           _fps         { "30" };
+    QLineEdit           _fps;
 
-    QPushButton         _btnStart    { "Start" };
+    QPushButton         _btnStart;
 
     FpsChecker          _fpsChecker;
     void initInterface( );

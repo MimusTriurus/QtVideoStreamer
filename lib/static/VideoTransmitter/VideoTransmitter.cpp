@@ -1,9 +1,11 @@
 #include "VideoTransmitter.h"
 
 VideoTransmitter::VideoTransmitter( QString host, quint16 port, QObject *parent ) :
-    QObject{ parent },
-    _host{ host },
-    _port{ port }
+    QObject     { parent },
+    _packetSize { 8192 },
+    _quality    { 55 },
+    _host       { host },
+    _port       { port }
 {
 
 }

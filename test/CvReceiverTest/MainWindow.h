@@ -24,9 +24,9 @@ public:
 private:
     Ui::MainWindow  *ui;
     VideoReciever   _receiver;
-    bool            _isListen   { false };
-    QPushButton     _btnListen  { "Start" };
-    QLineEdit       _port       { "10000" };
+    bool            _isListen;
+    QPushButton     _btnListen;
+    QLineEdit       _port;
     FpsChecker      _fpsChecker;
 
     QTimer          _tmrUpdate;

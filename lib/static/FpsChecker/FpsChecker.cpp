@@ -26,6 +26,14 @@ void FpsChecker::reset( ) {
     _counter = 0;
 }
 
+FpsChecker::FpsChecker( ) :
+    _counter{ 0 },
+    _sumTime{ 0 },
+    _startTime{ 0 }
+{
+
+}
+
 void FpsChecker::start( ) {
     _startTime = cv::getTickCount( );
 }

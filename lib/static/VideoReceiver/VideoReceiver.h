@@ -29,7 +29,7 @@ private:
     QByteArray  _imgBuffer;
     quint16     _port;
     double      _interval;
-    bool        _workInProgress{ false };
+    bool        _workInProgress;
 
     mutable QMutex _mutex;
 };

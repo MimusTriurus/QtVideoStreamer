@@ -3,10 +3,13 @@
 #include <MatSerialization.h>
 
 MainWindow::MainWindow( QWidget *parent ) :
-    QMainWindow( parent ),
-    ui( new Ui::MainWindow )
+    QMainWindow { parent },
+    ui          { new Ui::MainWindow },
+    _isListen   { false },
+    _btnListen  { "Start" },
+    _port       { "10000" }
 {
-    ui->setupUi(this);
+    ui->setupUi( this );
 
     connect( &_receiver, SIGNAL( imgDataReceived( QByteArray ) ),
              this, SLOT( onReceiveData( QByteArray ) ) );

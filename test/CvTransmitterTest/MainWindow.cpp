@@ -6,8 +6,25 @@
 #include <iostream>
 
 MainWindow::MainWindow( QWidget *parent ) :
-    QMainWindow( parent ),
-    ui( new Ui::MainWindow )
+    QMainWindow     { parent },
+    ui              { new Ui::MainWindow },
+    _cameraIsOpen   { false },
+    _showFrameWindow{ false },
+    _grayScale      { false },
+    _link           { false },
+    _resizeFrame    { false },
+    _qual           { 50 },
+    _cameraId       { "0" },
+    _host           { "127.0.0.1" },
+    _port           { "10000" },
+    _showFrameWin   { "Show frame window" },
+    _toGrayscale    { "Convert BGR2RGB" },
+    _resize         { "Resize to 320x240" },
+    _quality        { "50" },
+    _width          { "640" },
+    _height         { "480" },
+    _fps            { "30" },
+    _btnStart       { "Start" }
 {
     ui->setupUi( this );
     initInterface( );

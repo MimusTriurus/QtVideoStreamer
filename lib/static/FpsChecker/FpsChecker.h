@@ -6,6 +6,8 @@
 
 class FpsChecker {
 public:
+    FpsChecker( );
+
     void start( );
     void stop( );
 
@@ -13,9 +15,9 @@ public:
 
     void reset( );
 private:
-    int64 _counter{ 0 };
-    int64 _sumTime{ 0 };
-    int64 _startTime{ 0 };
+    int64 _counter;
+    int64 _sumTime;
+    int64 _startTime;
 
     int64  getTimeTicks( ) const;
     double getTimeMicro( ) const;

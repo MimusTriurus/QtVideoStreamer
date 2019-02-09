@@ -2,7 +2,7 @@
 #include <QDebug>
 
 Capture::Capture( QObject *parent ) :
-    QObject( parent ) {
+    QObject{ parent } {
 
 }
 

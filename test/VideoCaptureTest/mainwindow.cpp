@@ -7,8 +7,13 @@
 #include <QTimer>
 
 MainWindow::MainWindow( QWidget *parent ) :
-    QMainWindow( parent ),
-    ui( new Ui::MainWindow )
+    QMainWindow     { parent },
+    ui              { new Ui::MainWindow },
+    _start          { false },
+    _camIndex       { "0" },
+    _camFps         { "30" },
+    _showCameraWin  { "Show Camera Win" },
+    _btnStart       { "Start" }
 {
     ui->setupUi( this );
     _showCameraWin.setChecked( true );
